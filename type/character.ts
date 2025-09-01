@@ -7,7 +7,7 @@ import {
   WeaponEquipment,
 } from "../enums/equipment.ts";
 import { CharacterSexe } from "../enums/sexe.ts";
-import { SkinGame } from "../enums/skin.ts";
+import { CharacterSkinGame } from "../enums/skin.ts";
 import { ClassSpellsMap } from "./mapClassSpell.ts";
 
 export type CharacterEquipment = {
@@ -30,6 +30,6 @@ export type Character<Class extends CharacterClass> = {
   class: Class;
   spells: Array<ClassSpellsMap[Class]>;
   equipments: CharacterEquipment;
-  skinGame: SkinGame;
+  skinGame: CharacterSkinGame;
   skinColor: CharacterSkinColor;
 };

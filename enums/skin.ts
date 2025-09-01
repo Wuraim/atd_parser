@@ -1,4 +1,4 @@
-export enum SkinGame {
+export enum CharacterSkinGame {
   Dofus,
   Wakfu,
 }

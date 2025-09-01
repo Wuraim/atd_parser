@@ -1,14 +1,18 @@
-export const RECORD_CLASS: Record<number, string> = {
-  0x01: "Féca",
-  0x02: "Osamodas",
-  0x03: "Enutrof",
-  0x04: "",
-  0x05: "",
-  0x06: "Ecaflip",
-  0x07: "",
-  0x08: "Iop",
-  0x09: "",
-  0x0a: "",
-  0x0b: "Sacrieur",
-  0x0c: "Pandawa",
+import { CharacterClass } from "../enums/class.ts";
+
+export const RECORD_CLASS: Record<number, CharacterClass> = {
+  0x01: CharacterClass.Feca,
+  0x02: CharacterClass.Osamodas,
+  0x03: CharacterClass.Enutrof,
+  0x04: CharacterClass.Sram,
+  0x05: CharacterClass.Xelor,
+  0x06: CharacterClass.Ecaflip,
+  0x07: CharacterClass.Eniripsa,
+  0x08: CharacterClass.Iop,
+  0x09: CharacterClass.Cra,
+  0x0a: CharacterClass.Sadida,
+  0x0b: CharacterClass.Sacrieur,
+  0x0c: CharacterClass.Pandawa,
+  0x0d: CharacterClass.Roublard,
+  0x0e: CharacterClass.Zobal,
 };
