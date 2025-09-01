@@ -1,0 +1,16 @@
+export enum CharacterClass {
+  Feca,
+  Osamodas,
+  Enutrof,
+  Sram,
+  Xelor,
+  Ecaflip,
+  Eniripsa,
+  Iop,
+  Cra,
+  Sadida,
+  Sacrieur,
+  Pandawa,
+  Roublard,
+  Zobal,
+}
