@@ -16,6 +16,8 @@
 import * as fs from "@std/fs";
 import * as path from "@std/path";
 import { RECORD_CLASS } from "./mapping/class.ts";
+import { Character } from "./type/character.ts";
+import { CharacterClass } from "./enums/class.ts";
 
 const args = Deno.args;
 function getOption(name: string): string | null {
@@ -227,14 +229,17 @@ function parseOneCharacter(buf, headerIdx) {
   };
 }
 
-function parseAtd(filePath) {
-  const data = fs.readFileSync(filePath);
+interface FileParsing {
+  file: string;
+  team: Array<Partial<Character<CharacterClass>>>;
+}
+
+function parseAtd(filePath: string): FileParsing {
+  const data = fs.read(filePath);
   const n = data.length;
 
-  const team_size_le16 = n >= 2 ? data.readUInt16LE(0) : null;
-  const team_size_byte1 = n >= 2 ? data[1] : null;
+  const team: Array<Partial<Character<CharacterClass>>> = [];
 
-  const characters = [];
   let i = 0,
     guard = 0;
   while (i < n && guard++ < 10000) {
@@ -245,16 +250,13 @@ function parseAtd(filePath) {
       i = hdr.index + 1;
       continue;
     }
-    characters.push(got.entry);
+    team.push(got.entry);
     i = got.nextIndex;
   }
 
   return {
     file: path.resolve(filePath),
-    size: n,
-    team_size_le16,
-    team_size_byte1,
-    characters,
+    team,
   };
 }
 
@@ -262,7 +264,7 @@ function parseAtd(filePath) {
 function run() {
   const absolutePathInput = path.resolve(inputDirectory);
   const isAbsolutePathExisting = fs.existsSync(absolutePathInput);
-  const isAsbsolutePathDirectory = !Array.from(
+  const isAsbsolutePathDirectory = Array.from(
     fs.walkSync(absolutePathInput)
   ).some((file) => file.path === "." && file.isDirectory);
 
@@ -289,10 +291,10 @@ function run() {
     });
 
     if (LIST_ONLY) {
-      for (const r of results) {
-        console.log(`# ${path.basename(r.file)}`);
-        if (r.characters) {
-          for (const c of r.characters) {
+      for (const result of results) {
+        console.log(`# ${path.basename(result.file)}`);
+        if (result.characters) {
+          for (const c of result.characters) {
             // NEW: afficher classe/genre dans --list
             const cls =
               c.class_name ??
