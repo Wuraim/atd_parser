@@ -34,15 +34,17 @@ const DEBUG = args.includes("--debug");
 // Caractères plausibles pour un nom
 const NAME_OK = /^[\p{L}\p{N} .,'\-_/]{2,32}$/u;
 
+/*
+
 function readU32LE(buf, off) {
   return buf.readUInt32LE(off);
 }
 
 // Cherche un en-tête nom: 0x01 suivi de 0x04..0x07
-function findNextNameHeader(buf, start) {
-  for (let i = start; i + 1 < buf.length; i++) {
-    if (buf[i] === 0x01) {
-      const k = buf[i + 1];
+function findNextNameHeader(buffer: Uint8Array, start: number) {
+  for (let i = start; i + 1 < buffer.length; i++) {
+    if (buffer[i] === 0x01) {
+      const k = buffer[i + 1];
       if (k >= 0x04 && k <= 0x07) return { index: i, kindByte: k };
     }
   }
@@ -115,7 +117,7 @@ function readByteSafe(buf, off) {
 }
 
 // Lit un bloc personnage à partir de header.index
-function parseOneCharacter(buf, headerIdx) {
+function parseOneCharacter(buffer: Uint8Array, headerIdx: number) {
   // Sauter 0x01 0xKK et tolérer 0..8 octets de padding avant la longueur/texte
   const base = headerIdx + 2;
 
@@ -124,7 +126,7 @@ function parseOneCharacter(buf, headerIdx) {
     usedDelta = null;
   for (let delta = 0; delta <= 8 && !got; delta++) {
     const off = base + delta;
-    got = tryLengthPrefixed(buf, off);
+    got = tryLengthPrefixed(buffer, off);
     if (got) {
       usedOff = off;
       usedDelta = delta;
@@ -134,7 +136,7 @@ function parseOneCharacter(buf, headerIdx) {
   if (!got) {
     for (let delta = 0; delta <= 8 && !got; delta++) {
       const off = base + delta;
-      got = tryNullTerminated(buf, off);
+      got = tryNullTerminated(buffer, off);
       if (got) {
         usedOff = off;
         usedDelta = delta;
@@ -151,45 +153,48 @@ function parseOneCharacter(buf, headerIdx) {
   const nameLenBytes = lengthBytes; // déjà calculée par les fonctions try*
 
   // Flag optionnel 0xFE/0xFF (on tolère un éventuel 0x00 d’alignement avant)
-  if (cursor < buf.length && buf[cursor] === 0x00) cursor++;
+  if (cursor < buffer.length && buffer[cursor] === 0x00) cursor++;
   let flag = null;
-  if (cursor < buf.length && (buf[cursor] === 0xfe || buf[cursor] === 0xff)) {
-    flag = buf[cursor];
+  if (
+    cursor < buffer.length &&
+    (buffer[cursor] === 0xfe || buffer[cursor] === 0xff)
+  ) {
+    flag = buffer[cursor];
     cursor += 1;
   }
 
   // Signature 00 08 18 00 optionnelle (tolère 1 octet 0x00 de padding avant)
-  if (cursor < buf.length && buf[cursor] === 0x00) {
+  if (cursor < buffer.length && buffer[cursor] === 0x00) {
     if (
-      cursor + 4 <= buf.length &&
-      buf[cursor + 1] === 0x08 &&
-      buf[cursor + 2] === 0x18 &&
-      buf[cursor + 3] === 0x00
+      cursor + 4 <= buffer.length &&
+      buffer[cursor + 1] === 0x08 &&
+      buffer[cursor + 2] === 0x18 &&
+      buffer[cursor + 3] === 0x00
     ) {
       cursor += 4; // on laisse cursor sur le 0x00 initial pour lecture u32 ci-dessous
     }
   } else if (
-    cursor + 4 <= buf.length &&
-    buf[cursor] === 0x00 &&
-    buf[cursor + 1] === 0x08 &&
-    buf[cursor + 2] === 0x18 &&
-    buf[cursor + 3] === 0x00
+    cursor + 4 <= buffer.length &&
+    buffer[cursor] === 0x00 &&
+    buffer[cursor + 1] === 0x08 &&
+    buffer[cursor + 2] === 0x18 &&
+    buffer[cursor + 3] === 0x00
   ) {
     cursor += 4;
   }
 
   // Fin du bloc: prochain header ou fin
-  const nextHdr = findNextNameHeader(buf, cursor);
-  const end = nextHdr ? nextHdr.index : buf.length;
+  const nextHdr = findNextNameHeader(buffer, cursor);
+  const end = nextHdr ? nextHdr.index : buffer.length;
 
   // Lire les u32 LE jusqu'à end (tronqué au multiple de 4)
   const len32 = Math.floor((end - cursor) / 4);
   const u32 = new Array(len32);
-  for (let k = 0; k < len32; k++) u32[k] = readU32LE(buf, cursor + 4 * k);
+  for (let k = 0; k < len32; k++) u32[k] = readU32LE(buffer, cursor + 4 * k);
 
   // NEW: extraire classe/genre si possible
-  const classByte = readByteSafe(buf, startOfName - 2);
-  const genderByte = readByteSafe(buf, startOfName + nameLenBytes);
+  const classByte = readByteSafe(buffer, startOfName - 2);
+  const genderByte = readByteSafe(buffer, startOfName + nameLenBytes);
   const className = classByte != null ? RECORD_CLASS[classByte] || null : null;
   const genderName =
     genderByte === 0x00 ? "Male" : genderByte === 0x01 ? "Femelle" : null;
@@ -229,20 +234,25 @@ function parseOneCharacter(buf, headerIdx) {
   };
 }
 
+*/
+
+function getTeamLength(buffer: Uint8Array): number {
+  return buffer[1];
+}
+
 interface FileParsing {
   file: string;
   team: Array<Partial<Character<CharacterClass>>>;
 }
 
-function parseAtd(filePath: string): FileParsing {
-  const data = fs.read(filePath);
-  const n = data.length;
-
+function parseData(
+  data: Uint8Array<ArrayBuffer>
+): Array<Partial<Character<CharacterClass>>> {
   const team: Array<Partial<Character<CharacterClass>>> = [];
 
-  let i = 0,
-    guard = 0;
-  while (i < n && guard++ < 10000) {
+  /*
+  let i = 0;
+  while (i < data.length) {
     const hdr = findNextNameHeader(data, i);
     if (!hdr) break;
     const got = parseOneCharacter(data, hdr.index);
@@ -253,6 +263,17 @@ function parseAtd(filePath: string): FileParsing {
     team.push(got.entry);
     i = got.nextIndex;
   }
+  */
+
+  const teamLength = getTeamLength(data);
+  console.log("teamLength", teamLength, data);
+
+  return team;
+}
+
+function parseAtd(filePath: string): FileParsing {
+  const data = Deno.readFileSync(filePath);
+  const team = parseData(data);
 
   return {
     file: path.resolve(filePath),
@@ -266,7 +287,7 @@ function run() {
   const isAbsolutePathExisting = fs.existsSync(absolutePathInput);
   const isAsbsolutePathDirectory = Array.from(
     fs.walkSync(absolutePathInput)
-  ).some((file) => file.path === "." && file.isDirectory);
+  ).some((file) => file.name === "input" && file.isDirectory);
 
   if (isAbsolutePathExisting && isAsbsolutePathDirectory) {
     const inputFiles: Array<fs.WalkEntry> = Array.from(
@@ -283,13 +304,15 @@ function run() {
 
     const results: Array<unknown> = inputFiles.map((f) => {
       try {
-        return parseAtd(f);
+        console.log("f.path", f.path);
+        return parseAtd(f.path);
       } catch (e) {
         if (DEBUG) console.error("Erreur parse", f, e);
-        return { file: path.resolve(f), error: String(e) };
+        return { file: path.resolve(f.path), error: String(e) };
       }
     });
 
+    /*
     if (LIST_ONLY) {
       for (const result of results) {
         console.log(`# ${path.basename(result.file)}`);
@@ -310,24 +333,27 @@ function run() {
     }
 
     const absOut = path.resolve(outDir);
-    fs.mkdirSync(absOut, { recursive: true });
+    Deno.mkdirSync(absOut, { recursive: true });
     for (const r of results) {
       const base = path.basename(r.file).replace(/\.atd$/i, ".json");
       const outPath = path.join(absOut, base);
-      fs.writeFileSync(outPath, JSON.stringify(r, null, 2), "utf8");
+      Deno.writeFileSync(outPath, JSON.stringify(r, null, 2), "utf8");
     }
     console.log("OK - JSON individuels dans", absOut);
 
     if (mergeFile) {
       const mf = path.resolve(mergeFile);
-      fs.mkdirSync(path.dirname(mf), { recursive: true });
-      fs.writeFileSync(mf, JSON.stringify(results, null, 2), "utf8");
+      Deno.mkdirSync(path.dirname(mf), { recursive: true });
+      Deno.writeFileSync(mf, JSON.stringify(results, null, 2), "utf8");
       console.log("OK - fusion écrite dans", mf);
     }
+    */
   } else {
     console.error(
       "Le chemin d’entrée n’est pas un dossier valide:",
-      absolutePathInput
+      absolutePathInput,
+      isAbsolutePathExisting,
+      isAsbsolutePathDirectory
     );
     Deno.exit(1);
   }
