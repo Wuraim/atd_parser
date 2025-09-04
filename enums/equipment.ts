@@ -1,7 +1,89 @@
-// deno-lint-ignore-file no-empty-enum
-// We keep these enums even if they are empty to allow future additions
-export enum WeaponEquipment {}
-export enum PetEquipment {}
-export enum CapeEquipment {}
-export enum HeadEquipment {}
-export enum DofusEquipment {}
+export enum WeaponEquipment {
+  ArcAnge,
+  ArcHidsad,
+  ArcScieClone,
+  Bashers,
+  Celestine,
+  Cerberus,
+  Comete,
+  Falistos,
+  FossoyeuseInfidele,
+  Fourbeuses,
+  Hishantes,
+  Kassgoul,
+  Kwaklame,
+  LaCorde,
+  LuneRouge,
+  LyodaDa,
+  Meneuse,
+  Nitruhant,
+  Pataflone,
+  PelleMelle,
+  Rafeuses,
+  Razielle,
+  Solote,
+}
+
+export enum PetEquipment {
+  Abra,
+  Atouin,
+  BwakDair,
+  BwakDeFeu,
+  BwakDeTerre,
+  BwakDeau,
+  Chacha,
+  Chienchien,
+  Corbaka,
+  Fotome,
+  Kwoko,
+  Moon,
+  Rehokul,
+  Tiduc,
+  Wabbit,
+}
+
+export enum HeadEquipment {
+  Caracoiffe,
+  Champcoiffe,
+  Champo,
+  Cheveuleuse,
+  Clint,
+  CoiffeDuBouftou,
+  CoiffeDuPloukosse,
+  CoiffeDuPrespic,
+  Corbacoiffe,
+  CouronneDeNidhane,
+  Dantgoule,
+  Dora,
+  Dragocoiffe,
+  Kritter,
+  LeCasqueleur,
+  Moskitogalurette,
+}
+
+export enum CapeEquipment {
+  Abracapa,
+  CapeBouffante,
+  CapeChampChamp,
+  CapeDuCoqHu,
+  CapeDuPrespic,
+  CapeDuTofuFou,
+  CapeDuWaWabbit,
+  CapeOrale,
+  CapePlumelaches,
+  CapeTainflam,
+  Craquelocape,
+  Dofusteuse,
+  LaGuenille,
+  SacDuPetitMoskito,
+  Vegacape,
+}
+
+export enum DofusEquipment {
+  Cawotte,
+  Emeraude,
+  Glace,
+  Vulbis,
+  Pourpre,
+  Turquoise,
+}
