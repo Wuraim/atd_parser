@@ -1,30 +1,181 @@
-// deno-lint-ignore-file no-empty-enum
-// We keep these enums even if they are empty to allow future additions
+export enum FecaSpell {
+  ArmureAvalanche,
+  ArmureOrageuse,
+  AttaqueNuageuse,
+  BouclierFeca,
+  Bulle,
+  Faiblesse,
+  Immunite,
+  Rebond,
+  Teleportation,
+  Treve,
+}
 
-export enum FecaSpell {}
+export enum OsamodasSpell {
+  BenedictionAnimale,
+  Bouftou,
+  Carapace,
+  Corbeau,
+  Craqueleur,
+  CriDeLours,
+  Fouet,
+  PiqureMotivante,
+  Prespic,
+  Tofu,
+}
 
-export enum OsamodasSpell {}
+export enum EnutrofSpell {
+  Acceleration,
+  Corruption,
+  ForceDeLage,
+  Fossilisation,
+  LancerDePiece,
+  Maladresse,
+  MaladresseDeMasse,
+  PelleFantomatique,
+  PelleMasacrante,
+  TaniereDesRoches,
+}
 
-export enum EnutrofSpell {}
+export enum SramSpell {
+  AttaqueMortelle,
+  Brume,
+  CoupSournois,
+  Diversion,
+  Double,
+  Invisibilite,
+  InvisibiliteDautrui,
+  Peur,
+  PiegeMortel,
+  VolDeVie,
+}
 
-export enum SramSpell {}
+export enum IopSpell {
+  Amplification,
+  Bond,
+  ColereDeIop,
+  Couper,
+  EpeeCeleste,
+  EpeeDuDestin,
+  GuideDeBravoure,
+  Mutilation,
+  Pression,
+  Vitalite,
+}
 
-export enum IopSpell {}
+export enum CraSpell {
+  FlecheAbsorbante,
+  FlecheChercheuse,
+  FlecheDeRecul,
+  FlecheEnflamme,
+  FlecheGlacee,
+  FlecheMagique,
+  OeilDeLynx,
+  OeilDeTaupe,
+  TirTranquilisant,
+  TourmenteVisuelle,
+}
 
-export enum CraSpell {}
+export enum SadidaSpell {
+  Arbre,
+  LaBloqueuse,
+  LaFolle,
+  LaSacrifiee,
+  Poison,
+  PuissanceSylvestre,
+  Ronce,
+  SacrificePoupesque,
+  SavoirPoupesque,
+  Tremblement,
+}
 
-export enum SadidaSpell {}
+export enum SacrieurSpell {
+  Assaut,
+  Attirance,
+  Demence,
+  FolieSanguinaire,
+  Furie,
+  PiedDuSacrieur,
+  Punition,
+  Sacrifice,
+  TransfertDeVie,
+  Transposition,
+}
 
-export enum SacrieurSpell {}
+export enum PandawaSpell {
+  Chamrak,
+  CoupDeBambou,
+  FlasqueExplosive,
+  Karcham,
+  Karzam,
+  Pandatak,
+  Picole,
+  SouffleAlcoolise,
+  Stabilisation,
+  StabilisationDeGroupe,
+}
 
-export enum PandawaSpell {}
+export enum XelorSpell {
+  Aiguille,
+  CadranDeXelor,
+  Contre,
+  Devouement,
+  FuiteDuTemps,
+  Horloge,
+  Momification,
+  PoussiereTemporelle,
+  Ralentissement,
+  VolDuTemps,
+}
 
-export enum XelorSpell {}
+export enum EcaflipSpell {
+  BondDuFelin,
+  EspritFelin,
+  Fascination,
+  Guigne,
+  Loterie,
+  Perception,
+  PileOuFace,
+  Roulette,
+  ToutOuRien,
+  Trefle,
+}
 
-export enum EcaflipSpell {}
+export enum EniripsaSpell {
+  Altruisme,
+  MotCuratif,
+  MotDeJouvence,
+  MotDeRegeneration,
+  MotDeSacrifice,
+  MotDeTorture,
+  MotDeffacement,
+  MotRevitalisant,
+  MotSoignant,
+  MotStimulant,
+}
 
-export enum EniripsaSpell {}
+export enum RoublardSpell {
+  Arsenal,
+  BombeAEau,
+  BombeIncendiaire,
+  Cigue,
+  Evanescence,
+  Evasion,
+  Feinte,
+  Larcin,
+  MauvaisOeil,
+  Pulsar,
+}
 
-export enum RoublardSpell {}
-
-export enum ZobalSpell {}
+export enum ZobalSpell {
+  DardIrritant,
+  DardKelectrik,
+  Endurcissement,
+  Furia,
+  Mask,
+  Maskarade,
+  Pointera,
+  Sayanaura,
+  SecondSouffle,
+  Vaudou,
+}
