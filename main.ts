@@ -1,18 +1,3 @@
-#!/usr/bin/env node
-/**
- * main.js (v3.5)
- * - Par défaut: lit ./input et écrit des JSON individuels dans ./output
- *   --input <dir>    : (optionnel) dossier .atd (défaut: ./input)
- *   --out <dir>      : (optionnel) dossier .json (défaut: ./output)
- *   --merge <file>   : (optionnel) JSON fusionné en plus
- *   --list           : (optionnel) affiche juste la liste des noms
- *   --debug          : (optionnel) logs offsets/choix d'analyse
- *
- * Heuristique bloc "personnage":
- *   ... 01 KK [padding 0..8] ([len][name][term] | [name][term]) [flag=FE/FF]? [00 08 18 00]? [u32 LE]...
- *   où KK ∈ {04,05,06,07} et term ∈ {00,01}
- */
-
 import * as fs from "@std/fs";
 import * as path from "@std/path";
 import { ExtractedCharacter } from "./type/character.ts";
@@ -98,7 +83,7 @@ interface Cursor {
   value: number;
 }
 
-function parseData(
+export function parseData(
   data: Uint8Array<ArrayBuffer>
 ): Array<ExtractedCharacter<CharacterClass>> {
   const team: Array<ExtractedCharacter<CharacterClass>> = [];
@@ -108,7 +93,7 @@ function parseData(
   for (let indexCharacter = 0; indexCharacter < teamLength; indexCharacter++) {
     const characterSize = getInteger(data, cursor, 2);
 
-    // We don't know what this 3 bytes are for (Maybe a checksum)
+    // Sauvegarde de la position avant de lire le checksum
     const characterChecksum = getInteger(data, cursor, 3);
 
     const classCharacter = getInteger(data, cursor, 1);
@@ -148,6 +133,12 @@ function parseData(
     console.log("characterSize", characterSize.toString(16));
     console.log("characterChecksum", characterChecksum.toString(16));
     console.log("extractedCharacter", extractedCharacter);
+
+    const spellsHex = spellsCharacter.map((spell) => {
+      return spell.toString(16);
+    });
+
+    console.log(spellsHex);
   }
 
   return team;
@@ -155,6 +146,7 @@ function parseData(
 
 function parseAtd(filePath: string): FileParsing {
   const data = Deno.readFileSync(filePath);
+  console.log("data", data);
   const extractedTeam = parseData(data);
 
   return {
