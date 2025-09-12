@@ -12,5 +12,4 @@ export enum CharacterClass {
   Sacrieur,
   Pandawa,
   Roublard,
-  Zobal,
 }

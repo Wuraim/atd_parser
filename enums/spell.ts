@@ -166,16 +166,3 @@ export enum RoublardSpell {
   MauvaisOeil,
   Pulsar,
 }
-
-export enum ZobalSpell {
-  DardIrritant,
-  DardKelectrik,
-  Endurcissement,
-  Furia,
-  Mask,
-  Maskarade,
-  Pointera,
-  Sayanaura,
-  SecondSouffle,
-  Vaudou,
-}

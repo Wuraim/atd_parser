@@ -14,5 +14,4 @@ export const RECORD_CLASS: Record<number, CharacterClass> = {
   0x0b: CharacterClass.Sacrieur,
   0x0c: CharacterClass.Pandawa,
   0x0d: CharacterClass.Roublard,
-  0x0e: CharacterClass.Zobal,
 };
