@@ -76,7 +76,7 @@ function getEquipments(
 
 interface FileParsing {
   file: string;
-  extractedTeam: Array<ExtractedCharacter<CharacterClass>>;
+  extractedTeam: Array<ExtractedCharacter>;
 }
 
 interface Cursor {
@@ -85,8 +85,8 @@ interface Cursor {
 
 export function parseData(
   data: Uint8Array<ArrayBuffer>
-): Array<ExtractedCharacter<CharacterClass>> {
-  const team: Array<ExtractedCharacter<CharacterClass>> = [];
+): Array<ExtractedCharacter> {
+  const team: Array<ExtractedCharacter> = [];
 
   const cursor: Cursor = { value: 0 };
   const teamLength = getInteger(data, cursor, 2);
@@ -114,7 +114,7 @@ export function parseData(
     const equipmentsSize = getInteger(data, cursor, 2);
     const equipmentsCharacter = getEquipments(data, cursor, equipmentsSize);
 
-    const extractedCharacter: ExtractedCharacter<CharacterClass> = {
+    const extractedCharacter: ExtractedCharacter = {
       class: classCharacter,
       name: nameCharacter,
       sexe: sexeCharacter,

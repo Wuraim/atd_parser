@@ -13,7 +13,6 @@ import {
   SadidaSpell,
   SramSpell,
   XelorSpell,
-  ZobalSpell,
 } from "../enums/spell.ts";
 
 export type ClassSpellsMap = {
@@ -30,5 +29,4 @@ export type ClassSpellsMap = {
   [CharacterClass.Sacrieur]: SacrieurSpell;
   [CharacterClass.Pandawa]: PandawaSpell;
   [CharacterClass.Roublard]: RoublardSpell;
-  [CharacterClass.Zobal]: ZobalSpell;
 };

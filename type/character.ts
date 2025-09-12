@@ -35,12 +35,16 @@ export type Character<Class extends CharacterClass> = {
   skinColor: CharacterSkinColor;
 };
 
-export type ExtractedCharacter<Class extends CharacterClass> = {
+export type ExtractedCharacter = {
   name: string;
-  sexe: CharacterSexe;
-  class: Class;
-  spells: Array<ClassSpellsMap[Class]>;
+  sexe: number;
+  class: number;
+  spells: Array<number>;
   equipments: Array<number>;
-  skinGame: CharacterSkinGame;
-  skinColor: CharacterSkinColor;
+  skinGame: number;
+  skinColor: {
+    hairColor: number;
+    skinColor: number;
+    eyesColor: number;
+  };
 };
