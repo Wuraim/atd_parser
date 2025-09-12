@@ -1,3 +1,4 @@
+import { CharacterClass } from "../enums/class.ts";
 import {
   CraSpell,
   EcaflipSpell,
@@ -13,6 +14,7 @@ import {
   SramSpell,
   XelorSpell,
 } from "../enums/spell.ts";
+import { Spell } from "../type/spell.ts";
 
 export const RECORD_IOP_SPELL: Record<number, IopSpell> = {
   0x04: IopSpell.Pression,
@@ -181,4 +183,23 @@ export const RECORD_ENUTROF_SPELL: Record<number, EnutrofSpell> = {
   0x28: EnutrofSpell.PelleFantomatique,
   0x29: EnutrofSpell.PelleMasacrante,
   0x91: EnutrofSpell.TaniereDesRoches,
+};
+
+export const RECORD_CLASS_RECORD_CLASS_SPELL: Record<
+  CharacterClass,
+  Record<number, Spell>
+> = {
+  [CharacterClass.Iop]: RECORD_IOP_SPELL,
+  [CharacterClass.Cra]: RECORD_CRA_SPELL,
+  [CharacterClass.Sadida]: RECORD_SADIDA_SPELL,
+  [CharacterClass.Sacrieur]: RECORD_SACRIEUR_SPELL,
+  [CharacterClass.Pandawa]: RECORD_PANDAWA_SPELL,
+  [CharacterClass.Roublard]: RECORD_ROUBLARD_SPELL,
+  [CharacterClass.Eniripsa]: RECORD_ENIRIPSA_SPELL,
+  [CharacterClass.Sram]: RECORD_SRAM_SPELL,
+  [CharacterClass.Xelor]: RECORD_XELOR_SPELL,
+  [CharacterClass.Ecaflip]: RECORD_ECAFLIP_SPELL,
+  [CharacterClass.Feca]: RECORD_FECA_SPELL,
+  [CharacterClass.Osamodas]: RECORD_OSAMODAS_SPELL,
+  [CharacterClass.Enutrof]: RECORD_ENUTROF_SPELL,
 };

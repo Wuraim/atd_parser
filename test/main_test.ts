@@ -1,29 +1,33 @@
 import { expect } from "@std/expect";
+import { assert } from "@std/assert";
 import { parseData } from "../main.ts";
 import { readAtdFile } from "./utils.ts";
 import { CharacterClass } from "../enums/class.ts";
-import { EniripsaSpell } from "../enums/spell.ts";
-import { RECORD_ENIRIPSA_SPELL } from "../mapping/spell.ts";
+import { RECORD_CLASS } from "../mapping/class.ts";
+import { isExtractedTeamCorrect } from "../verification/verification.ts";
 
-Deno.test("La taille de l'équipe devrait être de 2", () => {
-  const buffer = readAtdFile("SPELLS5.atd");
-  const parsed = parseData(buffer);
+Deno.test("The team length is 2, only eniripsa with matched spells", () => {
+  const buffer = readAtdFile("correct/SPELLS5.atd");
+  const teamParsed = parseData(buffer);
 
-  expect(parsed.length).toBe(2);
-  expect(
-    parsed.every((character) => character.class === CharacterClass.Eniripsa)
+  expect(teamParsed.length).toBe(2);
+  assert(
+    teamParsed.every(
+      (character) => RECORD_CLASS[character.class] === CharacterClass.Eniripsa
+    )
   );
 
-  /*
-  const firstCharacter = parsed.find((sub) => sub.name === "UNO")!;
+  const firstCharacter = teamParsed.find((sub) => sub.name === "UNO")!;
+  expect(firstCharacter).not.toBe(undefined);
 
-  const unoSpellsKeys = Object.values(EniripsaSpell);
-  console.log(unoSpellsKeys, EniripsaSpell);
+  const secondCharacter = teamParsed.find((sub) => sub.name === "DOS")!;
+  expect(secondCharacter).not.toBe(undefined);
 
-  const extractedUnoSpells = firstCharacter.spells.map(
-    (num) => RECORD_ENIRIPSA_SPELL[num]
-  );
+  assert(isExtractedTeamCorrect(teamParsed));
+});
 
-  extractedUnoSpells.every((spell) => expect(unoSpells.includes(spell)));
-  */
+Deno.test("The extracted team shall be incorrect", () => {
+  const buffer = readAtdFile("incorrect/SPELLS5.atd");
+  const teamParsed = parseData(buffer);
+  expect(isExtractedTeamCorrect(teamParsed)).toBe(false);
 });
