@@ -19,8 +19,10 @@ export function isExtractedSpellsCorrect(
   const classSpellsRecord = RECORD_CLASS_RECORD_CLASS_SPELL[characterClass];
   const isListWithoutDuplicate =
     new Set(extractedSpells).size === extractedSpells.length;
+  const isListNotTooLong = extractedSpells.length <= 6;
 
   return (
+    isListNotTooLong &&
     isListWithoutDuplicate &&
     extractedSpells
       .map((sub) => classSpellsRecord[sub])
