@@ -1,7 +1,24 @@
 import * as fs from "@std/fs";
 import * as path from "@std/path";
-import { ExtractedCharacter } from "./type/character.ts";
+import {
+  Character,
+  CharacterEquipment,
+  ExtractedCharacter,
+} from "./type/character.ts";
 import { CharacterClass } from "./enums/class.ts";
+import { isExtractedTeamCorrect } from "./verification/verification.ts";
+import { RECORD_CLASS } from "./mapping/class.ts";
+import { SEXE_RECORD } from "./mapping/sexe.ts";
+import { RECORD_CLASS_RECORD_CLASS_SPELL } from "./mapping/spell.ts";
+import { RECORD_SKIN_GAME } from "./mapping/skinGame.ts";
+import {
+  RECORD_CAPE_EQUIPMENT,
+  RECORD_DOFUS_EQUIPMENT,
+  RECORD_HEAD_EQUIPMENT,
+  RECORD_PET_EQUIPMENT,
+  RECORD_WEAPON_EQUIPMENT,
+} from "./mapping/equipment.ts";
+import { ClassSpellsMap } from "./type/mapClassSpell.ts";
 
 const args = Deno.args;
 function getOption(name: string): string | null {
@@ -10,7 +27,6 @@ function getOption(name: string): string | null {
 }
 
 const inputDirectory = getOption("--input") || path.join(Deno.cwd(), "input");
-const DEBUG = args.includes("--debug");
 
 function getInteger(
   buffer: Uint8Array,
@@ -76,7 +92,7 @@ function getEquipments(
 
 interface FileParsing {
   file: string;
-  extractedTeam: Array<ExtractedCharacter>;
+  team: Array<Character<CharacterClass>> | undefined;
 }
 
 interface Cursor {
@@ -91,6 +107,8 @@ export function parseData(
   const cursor: Cursor = { value: 0 };
   const teamLength = getInteger(data, cursor, 2);
   for (let indexCharacter = 0; indexCharacter < teamLength; indexCharacter++) {
+    // TODO: #12 - Compare the expected size with the number of bytes read
+    // deno-lint-ignore no-unused-vars
     const characterSize = getInteger(data, cursor, 2);
 
     // Sauvegarde de la position avant de lire le checksum
@@ -126,10 +144,12 @@ export function parseData(
       },
       equipments: equipmentsCharacter,
       spells: spellsCharacter,
+      checksum: characterChecksum,
     };
 
     team.push(extractedCharacter);
 
+    /*
     console.log("characterSize", characterSize.toString(16));
     console.log("characterChecksum", characterChecksum.toString(16));
     console.log("extractedCharacter", extractedCharacter);
@@ -139,20 +159,90 @@ export function parseData(
     });
 
     console.log(spellsHex);
+    */
   }
 
   return team;
 }
 
+function mapCorrectExtractedSpells<T extends CharacterClass>(
+  classe: T,
+  extractedSpells: Array<number>
+): Array<ClassSpellsMap[T]> {
+  return extractedSpells.map(
+    (sub) => RECORD_CLASS_RECORD_CLASS_SPELL[classe][sub]
+  ) as Array<ClassSpellsMap[T]>;
+}
+
+function mapCorrectExtractedEquipments(
+  extractedEquipment: Array<number>
+): CharacterEquipment {
+  const result: CharacterEquipment = {};
+
+  extractedEquipment.forEach((sub) => {
+    if (RECORD_WEAPON_EQUIPMENT[sub]) {
+      result.weapon = RECORD_WEAPON_EQUIPMENT[sub];
+    } else if (RECORD_PET_EQUIPMENT[sub]) {
+      result.pet = RECORD_PET_EQUIPMENT[sub];
+    } else if (RECORD_HEAD_EQUIPMENT[sub]) {
+      result.head = RECORD_HEAD_EQUIPMENT[sub];
+    } else if (RECORD_CAPE_EQUIPMENT[sub]) {
+      result.cape = RECORD_CAPE_EQUIPMENT[sub];
+    } else {
+      result.dofus = RECORD_DOFUS_EQUIPMENT[sub];
+    }
+  });
+
+  return result;
+}
+
+function mapCorrectExtractedCharacter(
+  extractedCharacter: ExtractedCharacter
+): Character<CharacterClass> {
+  const classe = RECORD_CLASS[extractedCharacter.class];
+  return {
+    classe: RECORD_CLASS[extractedCharacter.class],
+    name: extractedCharacter.name,
+    sexe: SEXE_RECORD[extractedCharacter.sexe],
+    spells: mapCorrectExtractedSpells(classe, extractedCharacter.spells),
+    equipments: mapCorrectExtractedEquipments(extractedCharacter.equipments),
+    skinGame: RECORD_SKIN_GAME[extractedCharacter.skinGame],
+    skinColor: extractedCharacter.skinColor,
+    checksum: extractedCharacter.checksum,
+  };
+}
+
+export function readExtractedData(
+  extractedTeam: Array<ExtractedCharacter>
+): Array<Character<CharacterClass>> | undefined {
+  let result: Array<Character<CharacterClass>> | undefined;
+
+  if (isExtractedTeamCorrect(extractedTeam)) {
+    result = extractedTeam.map((sub) => mapCorrectExtractedCharacter(sub));
+  }
+
+  return result;
+}
+
 function parseAtd(filePath: string): FileParsing {
   const data = Deno.readFileSync(filePath);
-  console.log("data", data);
   const extractedTeam = parseData(data);
+  const team = readExtractedData(extractedTeam);
+  console.log(team);
 
   return {
     file: path.resolve(filePath),
-    extractedTeam,
+    team,
   };
+}
+
+// TODO: #13 - Write the convertTeamToAtd
+// deno-lint-ignore no-unused-vars
+function convertTeamToAtd(
+  // deno-lint-ignore no-unused-vars
+  team: Array<Character<CharacterClass>>
+): Array<number> {
+  return [0x00];
 }
 
 // Parcours dossier et sorties
@@ -174,17 +264,11 @@ function run() {
     if (inputFiles.length === 0) {
       console.error("Aucun fichier .atd trouvé dans:", absolutePathInput);
       Deno.exit(2);
+    } else {
+      inputFiles.forEach((sub) => {
+        parseAtd(sub.path);
+      });
     }
-
-    const results: Array<unknown> = inputFiles.map((f) => {
-      try {
-        console.log("f.path", f.path);
-        return parseAtd(f.path);
-      } catch (e) {
-        if (DEBUG) console.error("Erreur parse", f, e);
-        return { file: path.resolve(f.path), error: String(e) };
-      }
-    });
   } else {
     console.error(
       "Le chemin d’entrée n’est pas un dossier valide:",
