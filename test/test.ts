@@ -31,3 +31,11 @@ Deno.test("The extracted team shall be incorrect", () => {
   const teamParsed = parseData(buffer);
   expect(isExtractedTeamCorrect(teamParsed)).toBe(false);
 });
+
+Deno.test("Every spells are mapped", () => {
+  for (let i = 1; i <= 5; i++) {
+    const buffer = readAtdFile(`correct/SPELLS${i}.atd`);
+    const teamParsed = parseData(buffer);
+    expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+  }
+});
