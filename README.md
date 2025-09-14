@@ -9,7 +9,7 @@ Note: This project is not affiliated with the game or its creators.
 
 ## What is an .atd file?
 
-An “.atd” file is the team export format used by the game (e.g., Dofus Arena Confrontation/Arena-like titles). It contains the team composition and related metadata.
+An “.atd” file is the team export format used by the game (Download the game](https://www.arenareturns.com/fr/news/sortie-de-la-beta-toutes-les-informations)). It contains the team composition and related metadata.
 
 This module provides functions to:
 - Decode an .atd file into a typed JSON object.
