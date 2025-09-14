@@ -35,12 +35,17 @@ export type Character<T extends CharacterClass> = {
   checksum: number;
 };
 
+export type ExtractedEquipment = {
+  id: number;
+  category: number;
+};
+
 export type ExtractedCharacter = {
   name: string;
   sexe: number;
   class: number;
   spells: Array<number>;
-  equipments: Array<number>;
+  equipments: Array<ExtractedEquipment>;
   skinGame: number;
   skinColor: {
     hairColor: number;

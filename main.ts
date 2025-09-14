@@ -4,6 +4,7 @@ import {
   Character,
   CharacterEquipment,
   ExtractedCharacter,
+  ExtractedEquipment,
 } from "./type/character.ts";
 import { CharacterClass } from "./enums/class.ts";
 import { isExtractedTeamCorrect } from "./verification/verification.ts";
@@ -13,12 +14,14 @@ import { RECORD_CLASS_RECORD_CLASS_SPELL } from "./mapping/spell.ts";
 import { RECORD_SKIN_GAME } from "./mapping/skinGame.ts";
 import {
   RECORD_CAPE_EQUIPMENT,
+  RECORD_CATEGORY_EQUIPMENT,
   RECORD_DOFUS_EQUIPMENT,
   RECORD_HEAD_EQUIPMENT,
   RECORD_PET_EQUIPMENT,
   RECORD_WEAPON_EQUIPMENT,
 } from "./mapping/equipment.ts";
 import { ClassSpellsMap } from "./type/mapClassSpell.ts";
+import { EquipmentCategory } from "./enums/equipment.ts";
 
 const args = Deno.args;
 function getOption(name: string): string | null {
@@ -78,13 +81,14 @@ function getEquipments(
   buffer: Uint8Array,
   cursor: Cursor,
   byteLength: number
-): Array<number> {
+): Array<ExtractedEquipment> {
   const result = [];
 
   const offsetEnd = cursor.value + byteLength;
   while (cursor.value < offsetEnd) {
-    const spell = getInteger(buffer, cursor, 6);
-    result.push(spell);
+    const category = getInteger(buffer, cursor, 2);
+    const id = getInteger(buffer, cursor, 4);
+    result.push({ category, id });
   }
 
   return result;
@@ -148,18 +152,6 @@ export function parseData(
     };
 
     team.push(extractedCharacter);
-
-    /*
-    console.log("characterSize", characterSize.toString(16));
-    console.log("characterChecksum", characterChecksum.toString(16));
-    console.log("extractedCharacter", extractedCharacter);
-
-    const spellsHex = spellsCharacter.map((spell) => {
-      return spell.toString(16);
-    });
-
-    console.log(spellsHex);
-    */
   }
 
   return team;
@@ -174,24 +166,39 @@ function mapCorrectExtractedSpells<T extends CharacterClass>(
   ) as Array<ClassSpellsMap[T]>;
 }
 
+function mapCorrectExtractedEquipment(
+  characterEquipment: CharacterEquipment,
+  extractedEquipment: ExtractedEquipment
+): void {
+  const category = RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category];
+  switch (category) {
+    case EquipmentCategory.Weapon:
+      characterEquipment.weapon =
+        RECORD_WEAPON_EQUIPMENT[extractedEquipment.id];
+      break;
+    case EquipmentCategory.Pet:
+      characterEquipment.pet = RECORD_PET_EQUIPMENT[extractedEquipment.id];
+      break;
+    case EquipmentCategory.Cape:
+      characterEquipment.cape = RECORD_CAPE_EQUIPMENT[extractedEquipment.id];
+      break;
+    case EquipmentCategory.Head:
+      characterEquipment.head = RECORD_HEAD_EQUIPMENT[extractedEquipment.id];
+      break;
+    case EquipmentCategory.Dofus:
+      characterEquipment.dofus = RECORD_DOFUS_EQUIPMENT[extractedEquipment.id];
+      break;
+  }
+}
+
 function mapCorrectExtractedEquipments(
-  extractedEquipment: Array<number>
+  extractedEquipment: Array<ExtractedEquipment>
 ): CharacterEquipment {
   const result: CharacterEquipment = {};
 
-  extractedEquipment.forEach((sub) => {
-    if (RECORD_WEAPON_EQUIPMENT[sub]) {
-      result.weapon = RECORD_WEAPON_EQUIPMENT[sub];
-    } else if (RECORD_PET_EQUIPMENT[sub]) {
-      result.pet = RECORD_PET_EQUIPMENT[sub];
-    } else if (RECORD_HEAD_EQUIPMENT[sub]) {
-      result.head = RECORD_HEAD_EQUIPMENT[sub];
-    } else if (RECORD_CAPE_EQUIPMENT[sub]) {
-      result.cape = RECORD_CAPE_EQUIPMENT[sub];
-    } else {
-      result.dofus = RECORD_DOFUS_EQUIPMENT[sub];
-    }
-  });
+  extractedEquipment.forEach((sub) =>
+    mapCorrectExtractedEquipment(result, sub)
+  );
 
   return result;
 }
@@ -228,7 +235,6 @@ function parseAtd(filePath: string): FileParsing {
   const data = Deno.readFileSync(filePath);
   const extractedTeam = parseData(data);
   const team = readExtractedData(extractedTeam);
-  console.log(team);
 
   return {
     file: path.resolve(filePath),

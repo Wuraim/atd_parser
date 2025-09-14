@@ -87,3 +87,11 @@ export enum DofusEquipment {
   Pourpre,
   Turquoise,
 }
+
+export enum EquipmentCategory {
+  Weapon,
+  Pet,
+  Cape,
+  Head,
+  Dofus,
+}

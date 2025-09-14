@@ -1,4 +1,5 @@
 import { CharacterClass } from "../enums/class.ts";
+import { EquipmentCategory } from "../enums/equipment.ts";
 import { RECORD_CLASS } from "../mapping/class.ts";
 import {
   RECORD_HEAD_EQUIPMENT,
@@ -6,11 +7,12 @@ import {
   RECORD_PET_EQUIPMENT,
   RECORD_CAPE_EQUIPMENT,
   RECORD_DOFUS_EQUIPMENT,
+  RECORD_CATEGORY_EQUIPMENT,
 } from "../mapping/equipment.ts";
 import { SEXE_RECORD } from "../mapping/sexe.ts";
 import { RECORD_SKIN_GAME } from "../mapping/skinGame.ts";
 import { RECORD_CLASS_RECORD_CLASS_SPELL } from "../mapping/spell.ts";
-import { ExtractedCharacter } from "../type/character.ts";
+import { ExtractedCharacter, ExtractedEquipment } from "../type/character.ts";
 
 export function isExtractedSpellsCorrect(
   characterClass: CharacterClass,
@@ -42,28 +44,73 @@ export function isExtractedSkinGameCorrect(extractedGame: number): boolean {
   return RECORD_SKIN_GAME[extractedGame] !== undefined;
 }
 
-function isHeadEquipment(extractedEquipment: number): boolean {
-  return RECORD_HEAD_EQUIPMENT[extractedEquipment] !== undefined;
+export function isWeaponEquipment(
+  extractedEquipment: ExtractedEquipment
+): boolean {
+  return (
+    RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] ===
+      EquipmentCategory.Weapon &&
+    RECORD_WEAPON_EQUIPMENT[extractedEquipment.id] !== undefined
+  );
 }
 
-export function isWeaponEquipment(extractedEquipment: number): boolean {
-  return RECORD_WEAPON_EQUIPMENT[extractedEquipment] !== undefined;
+export function isPetEquipment(
+  extractedEquipment: ExtractedEquipment
+): boolean {
+  return (
+    RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] ===
+      EquipmentCategory.Pet &&
+    RECORD_PET_EQUIPMENT[extractedEquipment.id] !== undefined
+  );
 }
 
-export function isPetEquipment(extractedEquipment: number): boolean {
-  return RECORD_PET_EQUIPMENT[extractedEquipment] !== undefined;
+export function isCapeEquipment(
+  extractedEquipment: ExtractedEquipment
+): boolean {
+  return (
+    RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] ===
+      EquipmentCategory.Cape &&
+    RECORD_CAPE_EQUIPMENT[extractedEquipment.id] !== undefined
+  );
 }
 
-export function isCapeEquipment(extractedEquipment: number): boolean {
-  return RECORD_CAPE_EQUIPMENT[extractedEquipment] !== undefined;
+function isHeadEquipment(extractedEquipment: ExtractedEquipment): boolean {
+  return (
+    RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] ===
+      EquipmentCategory.Head &&
+    RECORD_HEAD_EQUIPMENT[extractedEquipment.id] !== undefined
+  );
 }
 
-export function isDofusEquipment(extractedEquipment: number): boolean {
-  return RECORD_DOFUS_EQUIPMENT[extractedEquipment] !== undefined;
+export function isDofusEquipment(
+  extractedEquipment: ExtractedEquipment
+): boolean {
+  return (
+    RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] ===
+      EquipmentCategory.Dofus &&
+    RECORD_DOFUS_EQUIPMENT[extractedEquipment.id] !== undefined
+  );
+}
+
+function helperEquipmentMapping(category: number): string {
+  switch (category) {
+    case 0:
+      return "weapon";
+    case 1:
+      return "pet";
+    case 2:
+      return "cape";
+    case 3:
+      return "head";
+    case 4:
+      return "dofus";
+    default:
+      return "unknown";
+  }
 }
 
 export function isExtractedEquipmentsCorrect(
-  extractedEquipments: Array<number>
+  extractedEquipments: Array<ExtractedEquipment>
 ): boolean {
   let nbWeapon = 0,
     nbPet = 0,
@@ -73,14 +120,17 @@ export function isExtractedEquipmentsCorrect(
 
   let hasError = false;
 
-  extractedEquipments.forEach((sub) => {
+  for (const sub of extractedEquipments) {
     if (isWeaponEquipment(sub)) nbWeapon++;
     else if (isPetEquipment(sub)) nbPet++;
     else if (isCapeEquipment(sub)) nbCape++;
     else if (isHeadEquipment(sub)) nbHead++;
     else if (isDofusEquipment(sub)) nbDofus++;
-    else hasError = true;
-  });
+    else {
+      hasError = true;
+      break;
+    }
+  }
 
   return (
     nbWeapon < 2 &&

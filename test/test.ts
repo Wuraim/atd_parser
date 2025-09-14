@@ -39,3 +39,17 @@ Deno.test("Every spells are mapped", () => {
     expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
   }
 });
+
+Deno.test("Every dofus are mapped", () => {
+  const buffer = readAtdFile("correct/equipdofu.atd");
+  const teamParsed = parseData(buffer);
+  expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+});
+
+Deno.test("All equipment are mapped", () => {
+  for (let i = 1; i <= 4; i++) {
+    const buffer = readAtdFile(`correct/STUFF${i}.atd`);
+    const teamParsed = parseData(buffer);
+    expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+  }
+});
