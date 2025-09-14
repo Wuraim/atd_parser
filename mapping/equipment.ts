@@ -7,6 +7,7 @@ import {
   EquipmentCategory,
 } from "../enums/equipment.ts";
 
+// 23 Weapon equipments
 export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {
   0xc: WeaponEquipment.Comete,
   0x17: WeaponEquipment.Hishantes,
@@ -33,6 +34,7 @@ export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {
   0x46: WeaponEquipment.Kassgoul,
 };
 
+// 15 Pet equipments
 export const RECORD_PET_EQUIPMENT: Record<number, PetEquipment> = {
   0xa6: PetEquipment.Abra,
   0x5c: PetEquipment.BwakDeFeu,
@@ -51,6 +53,7 @@ export const RECORD_PET_EQUIPMENT: Record<number, PetEquipment> = {
   0x9e: PetEquipment.Tiduc,
 };
 
+// 15 Cape equipments
 export const RECORD_CAPE_EQUIPMENT: Record<number, CapeEquipment> = {
   0x69: CapeEquipment.Abracapa,
   0x6a: CapeEquipment.CapeBouffante,
@@ -69,6 +72,7 @@ export const RECORD_CAPE_EQUIPMENT: Record<number, CapeEquipment> = {
   0x81: CapeEquipment.SacDuPetitMoskito,
 };
 
+// 16 Head equipments
 export const RECORD_HEAD_EQUIPMENT: Record<number, HeadEquipment> = {
   0x73: HeadEquipment.Caracoiffe,
   0x72: HeadEquipment.Clint,
@@ -85,8 +89,10 @@ export const RECORD_HEAD_EQUIPMENT: Record<number, HeadEquipment> = {
   0x85: HeadEquipment.LeCasqueleur,
   0x70: HeadEquipment.Dragocoiffe,
   0x6d: HeadEquipment.Kritter,
+  0x9d: HeadEquipment.CouronneDeNidhane,
 };
 
+// 6 Dofus equipments
 export const RECORD_DOFUS_EQUIPMENT: Record<number, DofusEquipment> = {
   0x79: DofusEquipment.Cawotte,
   0x76: DofusEquipment.Emeraude,

@@ -109,6 +109,14 @@ function helperEquipmentMapping(category: number): string {
   }
 }
 
+function helperEquipment(extractedEquipment: ExtractedEquipment): string {
+  return (
+    helperEquipmentMapping(extractedEquipment.category) +
+    " -> " +
+    extractedEquipment.id.toString(16)
+  );
+}
+
 export function isExtractedEquipmentsCorrect(
   extractedEquipments: Array<ExtractedEquipment>
 ): boolean {
@@ -128,6 +136,7 @@ export function isExtractedEquipmentsCorrect(
     else if (isDofusEquipment(sub)) nbDofus++;
     else {
       hasError = true;
+      console.error("Unknown equipement :", helperEquipment(sub));
       break;
     }
   }
@@ -154,6 +163,10 @@ export function isExtractedCharacterCorrect(
       isExtractedSkinGameCorrect(extractedCharacter.skinGame) &&
       isExtractedSpellsCorrect(supposedClass, extractedCharacter.spells) &&
       isExtractedEquipmentsCorrect(extractedCharacter.equipments);
+  }
+
+  if (result === false) {
+    console.error("name :", extractedCharacter.name);
   }
 
   return result;
