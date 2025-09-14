@@ -54,3 +54,8 @@ export type ExtractedCharacter = {
   };
   checksum: number;
 };
+
+export type ExtractedTeam = {
+  size: number;
+  list: Array<ExtractedCharacter>;
+};

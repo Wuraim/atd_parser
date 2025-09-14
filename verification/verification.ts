@@ -12,7 +12,11 @@ import {
 import { SEXE_RECORD } from "../mapping/sexe.ts";
 import { RECORD_SKIN_GAME } from "../mapping/skinGame.ts";
 import { RECORD_CLASS_RECORD_CLASS_SPELL } from "../mapping/spell.ts";
-import { ExtractedCharacter, ExtractedEquipment } from "../type/character.ts";
+import {
+  ExtractedCharacter,
+  ExtractedEquipment,
+  ExtractedTeam,
+} from "../type/character.ts";
 
 export function isExtractedSpellsCorrect(
   characterClass: CharacterClass,
@@ -172,8 +176,10 @@ export function isExtractedCharacterCorrect(
   return result;
 }
 
-export function isExtractedTeamCorrect(
-  extractedTeam: Array<ExtractedCharacter>
-): boolean {
-  return extractedTeam.every((sub) => isExtractedCharacterCorrect(sub));
+export function isExtractedTeamCorrect(extractedTeam: ExtractedTeam): boolean {
+  return (
+    extractedTeam.size <= 6 &&
+    extractedTeam.size === extractedTeam.list.length &&
+    extractedTeam.list.every((sub) => isExtractedCharacterCorrect(sub))
+  );
 }

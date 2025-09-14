@@ -30,17 +30,17 @@ Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   const buffer = readAtdFile("correct/SPELLS5.atd");
   const teamParsed = parseData(buffer);
 
-  expect(teamParsed.length).toBe(2);
+  expect(teamParsed.list.length).toBe(2);
   assert(
-    teamParsed.every(
+    teamParsed.list.every(
       (character) => RECORD_CLASS[character.class] === CharacterClass.Eniripsa
     )
   );
 
-  const firstCharacter = teamParsed.find((sub) => sub.name === "UNO")!;
+  const firstCharacter = teamParsed.list.find((sub) => sub.name === "UNO")!;
   expect(firstCharacter).not.toBe(undefined);
 
-  const secondCharacter = teamParsed.find((sub) => sub.name === "DOS")!;
+  const secondCharacter = teamParsed.list.find((sub) => sub.name === "DOS")!;
   expect(secondCharacter).not.toBe(undefined);
 
   assert(isExtractedTeamCorrect(teamParsed));

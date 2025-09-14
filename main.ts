@@ -4,6 +4,7 @@ import {
   CharacterEquipment,
   ExtractedCharacter,
   ExtractedEquipment,
+  ExtractedTeam,
 } from "./type/character.ts";
 import { CharacterClass } from "./enums/class.ts";
 import { isExtractedTeamCorrect } from "./verification/verification.ts";
@@ -94,9 +95,7 @@ interface Cursor {
   value: number;
 }
 
-export function parseData(
-  data: Uint8Array<ArrayBuffer>
-): Array<ExtractedCharacter> {
+export function parseData(data: Uint8Array<ArrayBuffer>): ExtractedTeam {
   const team: Array<ExtractedCharacter> = [];
 
   const cursor: Cursor = { value: 0 };
@@ -145,7 +144,10 @@ export function parseData(
     team.push(extractedCharacter);
   }
 
-  return team;
+  return {
+    size: teamLength,
+    list: team,
+  };
 }
 
 function mapCorrectExtractedSpells<T extends CharacterClass>(
@@ -211,12 +213,12 @@ function mapCorrectExtractedCharacter(
 }
 
 export function readExtractedData(
-  extractedTeam: Array<ExtractedCharacter>
+  extractedTeam: ExtractedTeam
 ): Array<Character<CharacterClass>> | undefined {
   let result: Array<Character<CharacterClass>> | undefined;
 
   if (isExtractedTeamCorrect(extractedTeam)) {
-    result = extractedTeam.map((sub) => mapCorrectExtractedCharacter(sub));
+    result = extractedTeam.list.map((sub) => mapCorrectExtractedCharacter(sub));
   }
 
   return result;
