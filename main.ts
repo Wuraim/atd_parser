@@ -1,4 +1,3 @@
-import * as fs from "@std/fs";
 import * as path from "@std/path";
 import {
   Character,
@@ -22,14 +21,6 @@ import {
 } from "./mapping/equipment.ts";
 import { ClassSpellsMap } from "./type/mapClassSpell.ts";
 import { EquipmentCategory } from "./enums/equipment.ts";
-
-const args = Deno.args;
-function getOption(name: string): string | null {
-  const i = args.indexOf(name);
-  return i >= 0 && i + 1 < args.length ? args[i + 1] : null;
-}
-
-const inputDirectory = getOption("--input") || path.join(Deno.cwd(), "input");
 
 function getInteger(
   buffer: Uint8Array,
@@ -250,40 +241,3 @@ function convertTeamToAtd(
 ): Array<number> {
   return [0x00];
 }
-
-// Parcours dossier et sorties
-function run() {
-  const absolutePathInput = path.resolve(inputDirectory);
-  const isAbsolutePathExisting = fs.existsSync(absolutePathInput);
-  const isAsbsolutePathDirectory = Array.from(
-    fs.walkSync(absolutePathInput)
-  ).some((file) => file.name === "input" && file.isDirectory);
-
-  if (isAbsolutePathExisting && isAsbsolutePathDirectory) {
-    const inputFiles: Array<fs.WalkEntry> = Array.from(
-      fs.walkSync(absolutePathInput, {
-        includeDirs: false,
-        exts: [".atd"],
-      })
-    );
-
-    if (inputFiles.length === 0) {
-      console.error("Aucun fichier .atd trouvé dans:", absolutePathInput);
-      Deno.exit(2);
-    } else {
-      inputFiles.forEach((sub) => {
-        parseAtd(sub.path);
-      });
-    }
-  } else {
-    console.error(
-      "Le chemin d’entrée n’est pas un dossier valide:",
-      absolutePathInput,
-      isAbsolutePathExisting,
-      isAsbsolutePathDirectory
-    );
-    Deno.exit(1);
-  }
-}
-
-run();
