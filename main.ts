@@ -1,10 +1,10 @@
-import * as path from "@std/path";
 import {
   Character,
   CharacterEquipment,
   ExtractedCharacter,
   ExtractedEquipment,
   ExtractedTeam,
+  Team,
 } from "./type/character.ts";
 import { CharacterClass } from "./enums/class.ts";
 import { isExtractedTeamCorrect } from "./verification/verification.ts";
@@ -31,7 +31,11 @@ function getInteger(
 ): number {
   let result = 0;
   for (let i = 0; i < byteLength; i++) {
-    result |= buffer[cursor.value + i] << (8 * (byteLength - i - 1));
+    try {
+      result |= buffer[cursor.value + i] << (8 * (byteLength - i - 1));
+    } catch {
+      throw new Error(ParsingError.INVALID_FILE_SIZE);
+    }
   }
   cursor.value += byteLength;
 
@@ -47,7 +51,12 @@ function getString(
 
   const offsetEnd = cursor.value + byteLength;
   while (cursor.value < offsetEnd) {
-    result += String.fromCharCode(buffer[cursor.value]);
+    try {
+      result += String.fromCharCode(buffer[cursor.value]);
+    } catch {
+      throw new Error(ParsingError.INVALID_FILE_SIZE);
+    }
+
     cursor.value++;
   }
 
@@ -87,11 +96,6 @@ function getEquipments(
   return result;
 }
 
-interface FileParsing {
-  file: string;
-  team: Array<Character<CharacterClass>> | undefined;
-}
-
 interface Cursor {
   value: number;
 }
@@ -104,7 +108,6 @@ export function parseData(data: Uint8Array<ArrayBuffer>): ExtractedTeam {
   for (let indexCharacter = 0; indexCharacter < teamLength; indexCharacter++) {
     const characterSize = getInteger(data, cursor, 2);
 
-    // Sauvegarde de la position avant de lire le checksum
     const characterChecksum = getInteger(data, cursor, 3);
 
     const classCharacter = getInteger(data, cursor, 1);
@@ -232,8 +235,8 @@ function mapCorrectExtractedCharacter(
 
 export function readExtractedData(
   extractedTeam: ExtractedTeam
-): Array<Character<CharacterClass>> | undefined {
-  let result: Array<Character<CharacterClass>> | undefined;
+): Team | undefined {
+  let result: Team | undefined;
 
   if (isExtractedTeamCorrect(extractedTeam)) {
     result = extractedTeam.list.map((sub) => mapCorrectExtractedCharacter(sub));
@@ -242,18 +245,15 @@ export function readExtractedData(
   return result;
 }
 
-function parseAtd(
-  data: Uint8Array<ArrayBuffer>
-): Array<Character<CharacterClass>> | undefined {
+export function parseAtd(data: Uint8Array<ArrayBuffer>): Team | undefined {
   const extractedTeam = parseData(data);
   return readExtractedData(extractedTeam);
 }
 
 // TODO: #13 - Write the convertTeamToAtd
-// deno-lint-ignore no-unused-vars
-function convertTeamToAtd(
+export function convertTeamToAtd(
   // deno-lint-ignore no-unused-vars
-  team: Array<Character<CharacterClass>>
+  team: Team
 ): Array<number> {
   return [0x00];
 }

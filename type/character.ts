@@ -59,3 +59,5 @@ export type ExtractedTeam = {
   size: number;
   list: Array<ExtractedCharacter>;
 };
+
+export type Team = Array<Character<CharacterClass>>;
