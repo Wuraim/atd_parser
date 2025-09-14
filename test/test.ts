@@ -231,3 +231,27 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
   expect(team[3]).toEqual(RALALALALA);
   expect(team[4]).toEqual(ALLERLENS);
 });
+
+Deno.test("Exact team composition -> LES_ROBERTS.atd", () => {
+  const buffer = readAtdFile("correct/LES_ROBERTS.atd");
+  const teamParsed = parseData(buffer);
+
+  expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+
+  const team = readExtractedData(teamParsed)!;
+
+  expect(team).not.toBe(undefined);
+
+  const Les_Roberts: Character<CharacterClass.Ecaflip> = {
+    classe: CharacterClass.Ecaflip,
+    name: "Michel",
+    sexe: CharacterSexe.Female,
+    spells: [],
+    equipments: {},
+    skinGame: CharacterSkinGame.Dofus,
+    skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
+    checksum: 66136,
+  };
+
+  expect(team[0]).toEqual(Les_Roberts)
+});
