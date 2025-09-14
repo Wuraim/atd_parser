@@ -12,12 +12,17 @@ import {
   FecaSpell,
   IopSpell,
   OsamodasSpell,
+  PandawaSpell,
+  SacrieurSpell,
+  SramSpell,
+  XelorSpell,
 } from "../enums/spell.ts";
 import {
   CapeEquipment,
   DofusEquipment,
   HeadEquipment,
   PetEquipment,
+  WeaponEquipment,
 } from "../enums/equipment.ts";
 import { CharacterSkinGame } from "../enums/skin.ts";
 
@@ -146,7 +151,6 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
 
   expect(team).not.toBe(undefined);
 
-  /*
   team.forEach((sub) => console.log(JSON.stringify(sub)));
 
   const craque: Character<CharacterClass.Osamodas> = {
@@ -163,7 +167,69 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
     },
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
-    checksum: 67536,
+    checksum: 66786,
   };
-  */
+
+  const redoublante: Character<CharacterClass.Sram> = {
+    classe: CharacterClass.Sram,
+    name: "Redoublante",
+    sexe: CharacterSexe.Female,
+    spells: [SramSpell.Double, SramSpell.VolDeVie],
+    equipments: {
+      pet: PetEquipment.Chacha,
+      head: HeadEquipment.CouronneDeNidhane,
+    },
+    skinGame: CharacterSkinGame.Dofus,
+    skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
+    checksum: 66636,
+  };
+
+  const miamiam: Character<CharacterClass.Sacrieur> = {
+    classe: CharacterClass.Sacrieur,
+    name: "MIAMAM",
+    sexe: CharacterSexe.Male,
+    spells: [
+      SacrieurSpell.Punition,
+      SacrieurSpell.FolieSanguinaire,
+      SacrieurSpell.Attirance,
+    ],
+    equipments: {
+      head: HeadEquipment.Dantgoule,
+    },
+    skinGame: CharacterSkinGame.Wakfu,
+    skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
+    checksum: 66886,
+  };
+
+  const RALALALALA: Character<CharacterClass.Xelor> = {
+    classe: CharacterClass.Xelor,
+    name: "RALALALALA",
+    sexe: CharacterSexe.Female,
+    spells: [XelorSpell.VolDuTemps, XelorSpell.Ralentissement],
+    equipments: {
+      cape: CapeEquipment.CapeBouffante,
+    },
+    skinGame: CharacterSkinGame.Dofus,
+    skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
+    checksum: 66736,
+  };
+
+  const ALLERLENS: Character<CharacterClass.Pandawa> = {
+    classe: CharacterClass.Pandawa,
+    name: "ALLERLENS",
+    sexe: CharacterSexe.Male,
+    spells: [PandawaSpell.Karcham, PandawaSpell.Chamrak],
+    equipments: {
+      weapon: WeaponEquipment.Rafeuses,
+    },
+    skinGame: CharacterSkinGame.Dofus,
+    skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
+    checksum: 66636,
+  };
+
+  expect(team[0]).toEqual(craque);
+  expect(team[1]).toEqual(redoublante);
+  expect(team[2]).toEqual(miamiam);
+  expect(team[3]).toEqual(RALALALALA);
+  expect(team[4]).toEqual(ALLERLENS);
 });
