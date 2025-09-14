@@ -22,6 +22,7 @@ import {
 } from "./mapping/equipment.ts";
 import { ClassSpellsMap } from "./type/mapClassSpell.ts";
 import { EquipmentCategory } from "./enums/equipment.ts";
+import { ParsingError } from "./enums/error.ts";
 
 function getInteger(
   buffer: Uint8Array,
@@ -101,8 +102,6 @@ export function parseData(data: Uint8Array<ArrayBuffer>): ExtractedTeam {
   const cursor: Cursor = { value: 0 };
   const teamLength = getInteger(data, cursor, 2);
   for (let indexCharacter = 0; indexCharacter < teamLength; indexCharacter++) {
-    // TODO: #12 - Compare the expected size with the number of bytes read
-    // deno-lint-ignore no-unused-vars
     const characterSize = getInteger(data, cursor, 2);
 
     // Sauvegarde de la position avant de lire le checksum
@@ -126,6 +125,21 @@ export function parseData(data: Uint8Array<ArrayBuffer>): ExtractedTeam {
     const equipmentsSize = getInteger(data, cursor, 2);
     const equipmentsCharacter = getEquipments(data, cursor, equipmentsSize);
 
+    const realCharacterSize =
+      3 +
+      1 +
+      1 +
+      nameSize +
+      1 +
+      1 +
+      1 +
+      1 +
+      1 +
+      2 +
+      spellsSize +
+      2 +
+      equipmentsSize;
+
     const extractedCharacter: ExtractedCharacter = {
       class: classCharacter,
       name: nameCharacter,
@@ -141,7 +155,11 @@ export function parseData(data: Uint8Array<ArrayBuffer>): ExtractedTeam {
       checksum: characterChecksum,
     };
 
-    team.push(extractedCharacter);
+    if (realCharacterSize === characterSize) {
+      team.push(extractedCharacter);
+    } else {
+      throw new Error(ParsingError.INVALID_CHARACTER_SIZE);
+    }
   }
 
   return {
@@ -224,15 +242,11 @@ export function readExtractedData(
   return result;
 }
 
-function parseAtd(filePath: string): FileParsing {
-  const data = Deno.readFileSync(filePath);
+function parseAtd(
+  data: Uint8Array<ArrayBuffer>
+): Array<Character<CharacterClass>> | undefined {
   const extractedTeam = parseData(data);
-  const team = readExtractedData(extractedTeam);
-
-  return {
-    file: path.resolve(filePath),
-    team,
-  };
+  return readExtractedData(extractedTeam);
 }
 
 // TODO: #13 - Write the convertTeamToAtd

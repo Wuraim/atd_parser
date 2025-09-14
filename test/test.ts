@@ -25,6 +25,7 @@ import {
   WeaponEquipment,
 } from "../enums/equipment.ts";
 import { CharacterSkinGame } from "../enums/skin.ts";
+import { ParsingError } from "../enums/error.ts";
 
 Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   const buffer = readAtdFile("correct/SPELLS5.atd");
@@ -46,10 +47,9 @@ Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   assert(isExtractedTeamCorrect(teamParsed));
 });
 
-Deno.test("The extracted team shall be incorrect", () => {
+Deno.test("The parsing shalml throw", () => {
   const buffer = readAtdFile("incorrect/SPELLS5.atd");
-  const teamParsed = parseData(buffer);
-  expect(isExtractedTeamCorrect(teamParsed)).toBe(false);
+  expect(() => parseData(buffer)).toThrow(ParsingError.INVALID_CHARACTER_SIZE);
 });
 
 Deno.test("Every spells are mapped", () => {
