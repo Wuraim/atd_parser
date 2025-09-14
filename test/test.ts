@@ -151,8 +151,6 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
 
   expect(team).not.toBe(undefined);
 
-  team.forEach((sub) => console.log(JSON.stringify(sub)));
-
   const craque: Character<CharacterClass.Osamodas> = {
     classe: CharacterClass.Osamodas,
     name: "Craque",
