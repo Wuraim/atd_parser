@@ -232,8 +232,8 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
   expect(team[4]).toEqual(ALLERLENS);
 });
 
-Deno.test("Exact team composition -> LES_ROBERTS.atd", () => {
-  const buffer = readAtdFile("correct/LES_ROBERTS.atd");
+Deno.test("Exact team composition -> Les Roberts.atd", () => {
+  const buffer = readAtdFile("correct/Les Roberts.atd");
   const teamParsed = parseData(buffer);
 
   expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
@@ -242,16 +242,55 @@ Deno.test("Exact team composition -> LES_ROBERTS.atd", () => {
 
   expect(team).not.toBe(undefined);
 
-  const Les_Roberts: Character<CharacterClass.Ecaflip> = {
-    classe: CharacterClass.Ecaflip,
-    name: "Michel",
-    sexe: CharacterSexe.Female,
-    spells: [],
-    equipments: {},
-    skinGame: CharacterSkinGame.Dofus,
-    skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
-    checksum: 66136,
+  const Didier: Character<CharacterClass.Sram> = {
+    classe: CharacterClass.Sram,
+    name: "Didier",
+    sexe: CharacterSexe.Male,
+    spells: [
+      SramSpell.AttaqueMortelle, 
+      SramSpell.InvisibiliteDautrui, 
+      SramSpell.Diversion, 
+      SramSpell.Double, 
+      SramSpell.Invisibilite, 
+      SramSpell.VolDeVie
+    ],
+    equipments: {
+      weapon: WeaponEquipment.ArcAnge,
+      pet : PetEquipment.BwakDeTerre,
+      cape : CapeEquipment.CapeDuWaWabbit,
+      head : HeadEquipment.Corbacoiffe,
+      dofus : DofusEquipment.Vulbis,
+    },
+    skinGame: CharacterSkinGame.Wakfu,
+    skinColor: { hairColor: 4, skinColor: 19, eyesColor: 25 },
+    checksum: 68636,
   };
 
-  expect(team[0]).toEqual(Les_Roberts)
+  const Michel: Character<CharacterClass.Ecaflip> = {
+  classe: CharacterClass.Ecaflip,
+  name: "Michel",
+  sexe: CharacterSexe.Female,
+  spells: [
+    EcaflipSpell.BondDuFelin,
+    EcaflipSpell.Trefle,
+    EcaflipSpell.Guigne,
+    EcaflipSpell.Loterie,
+    EcaflipSpell.PileOuFace,
+    EcaflipSpell.ToutOuRien,
+  ],
+  equipments: {
+    weapon: WeaponEquipment.Comete,
+    pet : PetEquipment.Chienchien,
+    cape : CapeEquipment.CapeOrale,
+    head : HeadEquipment.CoiffeDuBouftou,
+    dofus : DofusEquipment.Emeraude,
+  },
+  skinGame: CharacterSkinGame.Dofus,
+  skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
+  checksum: 68136,
+  };
+
+  expect(team[0]).toEqual(Didier)
+  expect(team[1]).toEqual(Michel)
+    
 });
