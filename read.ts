@@ -3,7 +3,7 @@ import {
   Team,
 } from "./type/character.ts";
 import { isExtractedTeamCorrect } from "./verification/verification.ts";
-import { mapCorrectExtractedCharacter } from "./main.ts";
+import { mapCorrectExtractedCharacter } from "./map.ts";
 
 export function readExtractedData(
   extractedTeam: ExtractedTeam
