@@ -1,4 +1,4 @@
-import { CharacterSexe } from "../enums/sexe.ts";
+import { CharacterSexe } from "@/enums/sexe.ts";
 
 export const SEXE_RECORD: Record<number, CharacterSexe> = {
   0x00: CharacterSexe.Male,

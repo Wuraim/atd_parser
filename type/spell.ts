@@ -12,7 +12,7 @@ import {
   SadidaSpell,
   SramSpell,
   XelorSpell,
-} from "../enums/spell.ts";
+} from "@/enums/spell.ts";
 
 export type Spell =
   | FecaSpell

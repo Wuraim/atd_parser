@@ -1,4 +1,4 @@
-import { CharacterClass } from "../enums/class.ts";
+import { CharacterClass } from "@/enums/class.ts";
 import {
   CraSpell,
   EcaflipSpell,
@@ -13,7 +13,7 @@ import {
   SadidaSpell,
   SramSpell,
   XelorSpell,
-} from "../enums/spell.ts";
+} from "@/enums/spell.ts";
 
 export type ClassSpellsMap = {
   [CharacterClass.Feca]: FecaSpell;

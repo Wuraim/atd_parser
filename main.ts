@@ -3,9 +3,9 @@ import {
   ExtractedEquipment,
   ExtractedTeam,
   Team,
-} from "./type/character.ts";
-import { ParsingError } from "./enums/error.ts";
-import { readExtractedData } from "./read.ts"
+} from "@/type/character.ts";
+import { ParsingError } from "@/enums/error.ts";
+import { readExtractedData } from "@/read.ts";
 
 function getInteger(
   buffer: Uint8Array,

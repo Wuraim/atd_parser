@@ -1,14 +1,14 @@
-import { CharacterClass } from "../enums/class.ts";
+import { CharacterClass } from "@/enums/class.ts";
 import {
   CapeEquipment,
   DofusEquipment,
   HeadEquipment,
   PetEquipment,
   WeaponEquipment,
-} from "../enums/equipment.ts";
-import { CharacterSexe } from "../enums/sexe.ts";
-import { CharacterSkinGame } from "../enums/skin.ts";
-import { ClassSpellsMap } from "./mapClassSpell.ts";
+} from "@/enums/equipment.ts";
+import { CharacterSexe } from "@/enums/sexe.ts";
+import { CharacterSkinGame } from "@/enums/skin.ts";
+import { ClassSpellsMap } from "@/type/mapClassSpell.ts";
 
 export type CharacterEquipment = {
   weapon?: WeaponEquipment;

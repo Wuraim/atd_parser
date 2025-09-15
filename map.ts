@@ -3,12 +3,12 @@ import {
   CharacterEquipment,
   ExtractedCharacter,
   ExtractedEquipment,
-} from "./type/character.ts";
-import { CharacterClass } from "./enums/class.ts";
-import { RECORD_CLASS } from "./mapping/class.ts";
-import { SEXE_RECORD } from "./mapping/sexe.ts";
-import { RECORD_CLASS_RECORD_CLASS_SPELL } from "./mapping/spell.ts";
-import { RECORD_SKIN_GAME } from "./mapping/skinGame.ts";
+} from "@/type/character.ts";
+import { CharacterClass } from "@/enums/class.ts";
+import { RECORD_CLASS } from "@/mapping/class.ts";
+import { SEXE_RECORD } from "@/mapping/sexe.ts";
+import { RECORD_CLASS_RECORD_CLASS_SPELL } from "@/mapping/spell.ts";
+import { RECORD_SKIN_GAME } from "@/mapping/skinGame.ts";
 import {
   RECORD_CAPE_EQUIPMENT,
   RECORD_CATEGORY_EQUIPMENT,
@@ -16,9 +16,9 @@ import {
   RECORD_HEAD_EQUIPMENT,
   RECORD_PET_EQUIPMENT,
   RECORD_WEAPON_EQUIPMENT,
-} from "./mapping/equipment.ts";
-import { ClassSpellsMap } from "./type/mapClassSpell.ts";
-import { EquipmentCategory } from "./enums/equipment.ts";
+} from "@/mapping/equipment.ts";
+import { ClassSpellsMap } from "@/type/mapClassSpell.ts";
+import { EquipmentCategory } from "@/enums/equipment.ts";
 
 function mapCorrectExtractedSpells<T extends CharacterClass>(
   classe: T,

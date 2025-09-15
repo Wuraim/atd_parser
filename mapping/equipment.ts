@@ -5,7 +5,7 @@ import {
   HeadEquipment,
   DofusEquipment,
   EquipmentCategory,
-} from "../enums/equipment.ts";
+} from "@/enums/equipment.ts";
 
 // 23 Weapon equipments
 export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {

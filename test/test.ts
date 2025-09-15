@@ -1,13 +1,13 @@
 import { expect } from "@std/expect";
 import { assert } from "@std/assert";
-import { parseData } from "../main.ts";
-import { readExtractedData } from "../read.ts";
-import { readAtdFile } from "./utils.ts";
-import { CharacterClass } from "../enums/class.ts";
-import { RECORD_CLASS } from "../mapping/class.ts";
-import { isExtractedTeamCorrect } from "../verification/verification.ts";
-import { Character } from "../type/character.ts";
-import { CharacterSexe } from "../enums/sexe.ts";
+import { parseData } from "@/main.ts";
+import { readExtractedData } from "@/read.ts";
+import { readAtdFile } from "@/test/utils.ts";
+import { CharacterClass } from "@/enums/class.ts";
+import { RECORD_CLASS } from "@/mapping/class.ts";
+import { isExtractedTeamCorrect } from "@/verification/verification.ts";
+import { Character } from "@/type/character.ts";
+import { CharacterSexe } from "@/enums/sexe.ts";
 import {
   EcaflipSpell,
   FecaSpell,
@@ -17,16 +17,16 @@ import {
   SacrieurSpell,
   SramSpell,
   XelorSpell,
-} from "../enums/spell.ts";
+} from "@/enums/spell.ts";
 import {
   CapeEquipment,
   DofusEquipment,
   HeadEquipment,
   PetEquipment,
   WeaponEquipment,
-} from "../enums/equipment.ts";
-import { CharacterSkinGame } from "../enums/skin.ts";
-import { ParsingError } from "../enums/error.ts";
+} from "@/enums/equipment.ts";
+import { CharacterSkinGame } from "@/enums/skin.ts";
+import { ParsingError } from "@/enums/error.ts";
 
 Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   const buffer = readAtdFile("correct/SPELLS5.atd");
@@ -248,19 +248,19 @@ Deno.test("Exact team composition -> Les Roberts.atd", () => {
     name: "Didier",
     sexe: CharacterSexe.Male,
     spells: [
-      SramSpell.AttaqueMortelle, 
-      SramSpell.InvisibiliteDautrui, 
-      SramSpell.Diversion, 
-      SramSpell.Double, 
-      SramSpell.Invisibilite, 
-      SramSpell.VolDeVie
+      SramSpell.AttaqueMortelle,
+      SramSpell.InvisibiliteDautrui,
+      SramSpell.Diversion,
+      SramSpell.Double,
+      SramSpell.Invisibilite,
+      SramSpell.VolDeVie,
     ],
     equipments: {
       weapon: WeaponEquipment.ArcAnge,
-      pet : PetEquipment.BwakDeTerre,
-      cape : CapeEquipment.CapeDuWaWabbit,
-      head : HeadEquipment.Corbacoiffe,
-      dofus : DofusEquipment.Vulbis,
+      pet: PetEquipment.BwakDeTerre,
+      cape: CapeEquipment.CapeDuWaWabbit,
+      head: HeadEquipment.Corbacoiffe,
+      dofus: DofusEquipment.Vulbis,
     },
     skinGame: CharacterSkinGame.Wakfu,
     skinColor: { hairColor: 4, skinColor: 19, eyesColor: 25 },
@@ -268,30 +268,29 @@ Deno.test("Exact team composition -> Les Roberts.atd", () => {
   };
 
   const Michel: Character<CharacterClass.Ecaflip> = {
-  classe: CharacterClass.Ecaflip,
-  name: "Michel",
-  sexe: CharacterSexe.Female,
-  spells: [
-    EcaflipSpell.BondDuFelin,
-    EcaflipSpell.Trefle,
-    EcaflipSpell.Guigne,
-    EcaflipSpell.Loterie,
-    EcaflipSpell.PileOuFace,
-    EcaflipSpell.ToutOuRien,
-  ],
-  equipments: {
-    weapon: WeaponEquipment.Comete,
-    pet : PetEquipment.Chienchien,
-    cape : CapeEquipment.CapeOrale,
-    head : HeadEquipment.CoiffeDuBouftou,
-    dofus : DofusEquipment.Emeraude,
-  },
-  skinGame: CharacterSkinGame.Dofus,
-  skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
-  checksum: 68136,
+    classe: CharacterClass.Ecaflip,
+    name: "Michel",
+    sexe: CharacterSexe.Female,
+    spells: [
+      EcaflipSpell.BondDuFelin,
+      EcaflipSpell.Trefle,
+      EcaflipSpell.Guigne,
+      EcaflipSpell.Loterie,
+      EcaflipSpell.PileOuFace,
+      EcaflipSpell.ToutOuRien,
+    ],
+    equipments: {
+      weapon: WeaponEquipment.Comete,
+      pet: PetEquipment.Chienchien,
+      cape: CapeEquipment.CapeOrale,
+      head: HeadEquipment.CoiffeDuBouftou,
+      dofus: DofusEquipment.Emeraude,
+    },
+    skinGame: CharacterSkinGame.Dofus,
+    skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
+    checksum: 68136,
   };
 
-  expect(team[0]).toEqual(Didier)
-  expect(team[1]).toEqual(Michel)
-    
+  expect(team[0]).toEqual(Didier);
+  expect(team[1]).toEqual(Michel);
 });

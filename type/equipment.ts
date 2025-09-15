@@ -4,7 +4,7 @@ import {
   HeadEquipment,
   PetEquipment,
   WeaponEquipment,
-} from "../enums/equipment.ts";
+} from "@/enums/equipment.ts";
 
 export type Equipment = WeaponEquipment &
   PetEquipment &

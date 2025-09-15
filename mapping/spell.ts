@@ -1,4 +1,4 @@
-import { CharacterClass } from "../enums/class.ts";
+import { CharacterClass } from "@/enums/class.ts";
 import {
   CraSpell,
   EcaflipSpell,
