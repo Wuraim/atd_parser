@@ -176,10 +176,25 @@ export function isExtractedCharacterCorrect(
   return result;
 }
 
+export function isNumberOfClasseCorrect(extractedTeam: ExtractedTeam): boolean {
+  const map = new Map();
+
+  extractedTeam.list.forEach((character) => {
+    const classe = RECORD_CLASS[character.class];
+    if (classe) {
+      const nbOfClasse = map.get(classe) ?? 0;
+      map.set(classe, nbOfClasse + 1);
+    }
+  });
+
+  return map.values().every((count) => count <= 2);
+}
+
 export function isExtractedTeamCorrect(extractedTeam: ExtractedTeam): boolean {
   return (
     extractedTeam.size <= 6 &&
     extractedTeam.size === extractedTeam.list.length &&
+    isNumberOfClasseCorrect(extractedTeam) &&
     extractedTeam.list.every((sub) => isExtractedCharacterCorrect(sub))
   );
 }
