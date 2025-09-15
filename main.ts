@@ -7,7 +7,6 @@ import {
   Team,
 } from "./type/character.ts";
 import { CharacterClass } from "./enums/class.ts";
-import { isExtractedTeamCorrect } from "./verification/verification.ts";
 import { RECORD_CLASS } from "./mapping/class.ts";
 import { SEXE_RECORD } from "./mapping/sexe.ts";
 import { RECORD_CLASS_RECORD_CLASS_SPELL } from "./mapping/spell.ts";
@@ -23,6 +22,7 @@ import {
 import { ClassSpellsMap } from "./type/mapClassSpell.ts";
 import { EquipmentCategory } from "./enums/equipment.ts";
 import { ParsingError } from "./enums/error.ts";
+import { readExtractedData } from "./read.ts"
 
 function getInteger(
   buffer: Uint8Array,
@@ -217,7 +217,7 @@ function mapCorrectExtractedEquipments(
   return result;
 }
 
-function mapCorrectExtractedCharacter(
+export function mapCorrectExtractedCharacter(
   extractedCharacter: ExtractedCharacter
 ): Character<CharacterClass> {
   const classe = RECORD_CLASS[extractedCharacter.class];
@@ -231,18 +231,6 @@ function mapCorrectExtractedCharacter(
     skinColor: extractedCharacter.skinColor,
     checksum: extractedCharacter.checksum,
   };
-}
-
-export function readExtractedData(
-  extractedTeam: ExtractedTeam
-): Team | undefined {
-  let result: Team | undefined;
-
-  if (isExtractedTeamCorrect(extractedTeam)) {
-    result = extractedTeam.list.map((sub) => mapCorrectExtractedCharacter(sub));
-  }
-
-  return result;
 }
 
 export function parseAtd(data: Uint8Array<ArrayBuffer>): Team | undefined {

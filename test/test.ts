@@ -1,6 +1,7 @@
 import { expect } from "@std/expect";
 import { assert } from "@std/assert";
-import { parseData, readExtractedData } from "../main.ts";
+import { parseData } from "../main.ts";
+import { readExtractedData } from "../read.ts";
 import { readAtdFile } from "./utils.ts";
 import { CharacterClass } from "../enums/class.ts";
 import { RECORD_CLASS } from "../mapping/class.ts";
