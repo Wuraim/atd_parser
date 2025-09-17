@@ -6,6 +6,7 @@ import {
   DofusEquipment,
   EquipmentCategory,
 } from "@/enums/equipment.ts";
+import { invertRecord } from "@/mapping/utils.ts";
 
 // 23 Weapon equipments
 export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {
@@ -117,6 +118,10 @@ export const RECORD_CATEGORY_EQUIPMENT: Record<number, EquipmentCategory> = {
   0x4: EquipmentCategory.Dofus,
 };
 
+export const RECORD_CATEGORY_EQUIPMENT_REVERSE = invertRecord(
+  RECORD_CATEGORY_EQUIPMENT
+);
+
 export const RECORD_CATEGORY_RECORD_ID: Record<
   EquipmentCategory,
   RecordEquipment
@@ -127,3 +132,17 @@ export const RECORD_CATEGORY_RECORD_ID: Record<
   [EquipmentCategory.Head]: RECORD_HEAD_EQUIPMENT,
   [EquipmentCategory.Dofus]: RECORD_DOFUS_EQUIPMENT,
 };
+
+export const RECORD_WEAPON_EQUIPMENT_REVERSE = invertRecord(
+  RECORD_WEAPON_EQUIPMENT
+);
+export const RECORD_PET_EQUIPMENT_REVERSE = invertRecord(RECORD_PET_EQUIPMENT);
+export const RECORD_CAPE_EQUIPMENT_REVERSE = invertRecord(
+  RECORD_CAPE_EQUIPMENT
+);
+export const RECORD_HEAD_EQUIPMENT_REVERSE = invertRecord(
+  RECORD_HEAD_EQUIPMENT
+);
+export const RECORD_DOFUS_EQUIPMENT_REVERSE = invertRecord(
+  RECORD_DOFUS_EQUIPMENT
+);

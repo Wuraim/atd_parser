@@ -13,8 +13,9 @@ import {
   SadidaSpell,
   SramSpell,
   XelorSpell,
-} from "../enums/spell.ts";
-import { Spell } from "../type/spell.ts";
+} from "@/enums/spell.ts";
+import { Spell } from "@/type/spell.ts";
+import { invertRecord } from "@/mapping/utils.ts";
 
 export const RECORD_IOP_SPELL: Record<number, IopSpell> = {
   0x04: IopSpell.Pression,
@@ -203,3 +204,25 @@ export const RECORD_CLASS_RECORD_CLASS_SPELL: Record<
   [CharacterClass.Osamodas]: RECORD_OSAMODAS_SPELL,
   [CharacterClass.Enutrof]: RECORD_ENUTROF_SPELL,
 };
+
+export const RECORD_IOP_SPELL_REVERSE = invertRecord(RECORD_IOP_SPELL);
+export const RECORD_CRA_SPELL_REVERSE = invertRecord(RECORD_CRA_SPELL);
+export const RECORD_SADIDA_SPELL_REVERSE = invertRecord(RECORD_SADIDA_SPELL);
+export const RECORD_SACRIEUR_SPELL_REVERSE = invertRecord(
+  RECORD_SACRIEUR_SPELL
+);
+export const RECORD_PANDAWA_SPELL_REVERSE = invertRecord(RECORD_PANDAWA_SPELL);
+export const RECORD_ROUBLARD_SPELL_REVERSE = invertRecord(
+  RECORD_ROUBLARD_SPELL
+);
+export const RECORD_ENIRIPSA_SPELL_REVERSE = invertRecord(
+  RECORD_ENIRIPSA_SPELL
+);
+export const RECORD_SRAM_SPELL_REVERSE = invertRecord(RECORD_SRAM_SPELL);
+export const RECORD_XELOR_SPELL_REVERSE = invertRecord(RECORD_XELOR_SPELL);
+export const RECORD_ECAFLIP_SPELL_REVERSE = invertRecord(RECORD_ECAFLIP_SPELL);
+export const RECORD_FECA_SPELL_REVERSE = invertRecord(RECORD_FECA_SPELL);
+export const RECORD_OSAMODAS_SPELL_REVERSE = invertRecord(
+  RECORD_OSAMODAS_SPELL
+);
+export const RECORD_ENUTROF_SPELL_REVERSE = invertRecord(RECORD_ENUTROF_SPELL);

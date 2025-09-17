@@ -1,4 +1,5 @@
 import { CharacterClass } from "@/enums/class.ts";
+import { invertRecord } from "@/mapping/utils.ts";
 
 export const RECORD_CLASS: Record<number, CharacterClass> = {
   0x01: CharacterClass.Feca,
@@ -15,3 +16,5 @@ export const RECORD_CLASS: Record<number, CharacterClass> = {
   0x0c: CharacterClass.Pandawa,
   0x0d: CharacterClass.Roublard,
 };
+
+export const RECORD_CLASS_REVERSE = invertRecord(RECORD_CLASS);

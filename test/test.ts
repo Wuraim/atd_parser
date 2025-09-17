@@ -1,6 +1,6 @@
 import { expect } from "@std/expect";
 import { assert } from "@std/assert";
-import { parseData } from "@/main.ts";
+import { convertTeamToAtd, parseData } from "@/main.ts";
 import { readExtractedData } from "@/read.ts";
 import { readAtdFile } from "@/test/utils.ts";
 import { CharacterClass } from "@/enums/class.ts";
@@ -46,6 +46,10 @@ Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   expect(secondCharacter).not.toBe(undefined);
 
   assert(isExtractedTeamCorrect(teamParsed));
+
+  const team = readExtractedData(teamParsed)!;
+  const atdData = convertTeamToAtd(team);
+  expect(atdData).toEqual(buffer);
 });
 
 Deno.test("The parsing shalml throw", () => {
@@ -231,6 +235,9 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
   expect(team[2]).toEqual(miamiam);
   expect(team[3]).toEqual(RALALALALA);
   expect(team[4]).toEqual(ALLERLENS);
+
+  const atdData = convertTeamToAtd(team);
+  expect(atdData).toEqual(buffer);
 });
 
 Deno.test("Exact team composition -> Les Roberts.atd", () => {
@@ -293,4 +300,7 @@ Deno.test("Exact team composition -> Les Roberts.atd", () => {
 
   expect(team[0]).toEqual(Didier);
   expect(team[1]).toEqual(Michel);
+
+  const atdData = convertTeamToAtd(team);
+  expect(atdData).toEqual(buffer);
 });
