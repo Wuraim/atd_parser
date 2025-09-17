@@ -1,4 +1,8 @@
 {
+  "name": "@arenareturns/atdparser",
+  "version": "0.4.4",
+  "license": "MIT",
+  "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch main.ts",
     "test": "deno test --allow-read test/test.ts"
@@ -9,5 +13,11 @@
     "@std/expect": "jsr:@std/expect@^1.0.17",
     "@std/fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2"
-  }
+  },
+  "exclude": [
+    "investigation",
+    "test",
+    "README.md"
+  ]
 }
+
