@@ -1,6 +1,6 @@
 {
   "name": "@arenareturns/atdparser",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "license": "MIT",
   "exports": "./main.ts",
   "tasks": {
@@ -14,8 +14,11 @@
     "@std/fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2"
   },
-  "exclude": [
-    "investigation"
-  ]
+  "publish": {
+    "exclude": [
+      "investigation",
+      "test"
+    ]
+  }
 }
 
