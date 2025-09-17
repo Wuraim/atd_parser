@@ -1,7 +1,5 @@
 import { expect } from "@std/expect";
 import { assert } from "@std/assert";
-import { convertTeamToAtd, parseData } from "@/main.ts";
-import { readExtractedData } from "@/read.ts";
 import { readAtdFile } from "@/test/utils.ts";
 import { CharacterClass } from "@/enums/class.ts";
 import { RECORD_CLASS } from "@/mapping/class.ts";
@@ -28,6 +26,8 @@ import {
 } from "@/enums/equipment.ts";
 import { CharacterSkinGame } from "@/enums/skin.ts";
 import { ParsingError } from "@/enums/error.ts";
+import { parseData, readExtractedData } from "../parse.ts";
+import { convertTeamToAtd } from "../unparse.ts";
 
 Deno.test("The team length is 2, only eniripsa with matched spells", () => {
   const buffer = readAtdFile("correct/SPELLS5.atd");
