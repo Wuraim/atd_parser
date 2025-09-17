@@ -7,6 +7,7 @@ import {
   EquipmentCategory,
 } from "@/enums/equipment.ts";
 import { invertRecord } from "@/mapping/utils.ts";
+import { Equipment } from "@/type/equipment.ts";
 
 // 23 Weapon equipments
 export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {
@@ -110,6 +111,13 @@ type RecordEquipment =
   | typeof RECORD_HEAD_EQUIPMENT
   | typeof RECORD_DOFUS_EQUIPMENT;
 
+type RecordEquipmentReverse =
+  | typeof RECORD_WEAPON_EQUIPMENT_REVERSE
+  | typeof RECORD_PET_EQUIPMENT_REVERSE
+  | typeof RECORD_CAPE_EQUIPMENT_REVERSE
+  | typeof RECORD_HEAD_EQUIPMENT_REVERSE
+  | typeof RECORD_DOFUS_EQUIPMENT_REVERSE;
+
 export const RECORD_CATEGORY_EQUIPMENT: Record<number, EquipmentCategory> = {
   0x0: EquipmentCategory.Weapon,
   0x1: EquipmentCategory.Pet,
@@ -146,3 +154,29 @@ export const RECORD_HEAD_EQUIPMENT_REVERSE = invertRecord(
 export const RECORD_DOFUS_EQUIPMENT_REVERSE = invertRecord(
   RECORD_DOFUS_EQUIPMENT
 );
+
+export const RECORD_CATEGORY_REVERSE_RECORD_ID_ENUM: Record<
+  EquipmentCategory,
+  RecordEquipmentReverse
+> = {
+  [EquipmentCategory.Weapon]: RECORD_WEAPON_EQUIPMENT_REVERSE,
+  [EquipmentCategory.Pet]: RECORD_PET_EQUIPMENT_REVERSE,
+  [EquipmentCategory.Cape]: RECORD_CAPE_EQUIPMENT_REVERSE,
+  [EquipmentCategory.Head]: RECORD_HEAD_EQUIPMENT_REVERSE,
+  [EquipmentCategory.Dofus]: RECORD_DOFUS_EQUIPMENT_REVERSE,
+};
+
+export function getEquipmentReverseRecord(category: EquipmentCategory) {
+  switch (category) {
+    case EquipmentCategory.Weapon:
+      return RECORD_WEAPON_EQUIPMENT_REVERSE;
+    case EquipmentCategory.Pet:
+      return RECORD_PET_EQUIPMENT_REVERSE;
+    case EquipmentCategory.Cape:
+      return RECORD_CAPE_EQUIPMENT_REVERSE;
+    case EquipmentCategory.Head:
+      return RECORD_HEAD_EQUIPMENT_REVERSE;
+    case EquipmentCategory.Dofus:
+      return RECORD_DOFUS_EQUIPMENT_REVERSE;
+  }
+}

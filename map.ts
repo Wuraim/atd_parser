@@ -1,6 +1,7 @@
 import {
   Character,
   CharacterEquipment,
+  CharacterEquipments,
   ExtractedCharacter,
   ExtractedEquipment,
 } from "@/type/character.ts";
@@ -10,15 +11,12 @@ import { SEXE_RECORD } from "@/mapping/sexe.ts";
 import { RECORD_CLASS_RECORD_CLASS_SPELL } from "@/mapping/spell.ts";
 import { RECORD_SKIN_GAME } from "@/mapping/skinGame.ts";
 import {
-  RECORD_CAPE_EQUIPMENT,
   RECORD_CATEGORY_EQUIPMENT,
-  RECORD_DOFUS_EQUIPMENT,
-  RECORD_HEAD_EQUIPMENT,
-  RECORD_PET_EQUIPMENT,
-  RECORD_WEAPON_EQUIPMENT,
+  RECORD_CATEGORY_RECORD_ID,
 } from "@/mapping/equipment.ts";
 import { ClassSpellsMap } from "@/type/mapClassSpell.ts";
 import { EquipmentCategory } from "@/enums/equipment.ts";
+import { Equipment } from "./type/equipment.ts";
 
 function mapCorrectExtractedSpells<T extends CharacterClass>(
   classe: T,
@@ -29,41 +27,21 @@ function mapCorrectExtractedSpells<T extends CharacterClass>(
   ) as Array<ClassSpellsMap[T]>;
 }
 
-function mapCorrectExtractedEquipment(
-  characterEquipment: CharacterEquipment,
+function mapCorrectExtractedEquipment<T extends EquipmentCategory>(
   extractedEquipment: ExtractedEquipment
-): void {
-  const category = RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category];
-  switch (category) {
-    case EquipmentCategory.Weapon:
-      characterEquipment.weapon =
-        RECORD_WEAPON_EQUIPMENT[extractedEquipment.id];
-      break;
-    case EquipmentCategory.Pet:
-      characterEquipment.pet = RECORD_PET_EQUIPMENT[extractedEquipment.id];
-      break;
-    case EquipmentCategory.Cape:
-      characterEquipment.cape = RECORD_CAPE_EQUIPMENT[extractedEquipment.id];
-      break;
-    case EquipmentCategory.Head:
-      characterEquipment.head = RECORD_HEAD_EQUIPMENT[extractedEquipment.id];
-      break;
-    case EquipmentCategory.Dofus:
-      characterEquipment.dofus = RECORD_DOFUS_EQUIPMENT[extractedEquipment.id];
-      break;
-  }
+): CharacterEquipment<T> {
+  const category = RECORD_CATEGORY_EQUIPMENT[extractedEquipment.category] as T;
+  const id = RECORD_CATEGORY_RECORD_ID[category][
+    extractedEquipment.id
+  ] as Equipment[T];
+
+  return { category, id };
 }
 
 function mapCorrectExtractedEquipments(
-  extractedEquipment: Array<ExtractedEquipment>
-): CharacterEquipment {
-  const result: CharacterEquipment = {};
-
-  extractedEquipment.forEach((sub) =>
-    mapCorrectExtractedEquipment(result, sub)
-  );
-
-  return result;
+  extractedEquipments: Array<ExtractedEquipment>
+): CharacterEquipments {
+  return extractedEquipments.map((sub) => mapCorrectExtractedEquipment(sub));
 }
 
 export function mapCorrectExtractedCharacter(

@@ -21,6 +21,7 @@ import {
 import {
   CapeEquipment,
   DofusEquipment,
+  EquipmentCategory,
   HeadEquipment,
   PetEquipment,
   WeaponEquipment,
@@ -62,6 +63,12 @@ Deno.test("Every spells are mapped", () => {
     const buffer = readAtdFile(`correct/SPELLS${i}.atd`);
     const teamParsed = parseData(buffer);
     expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+
+    const team = readExtractedData(teamParsed)!;
+    expect(team).not.toBe(undefined);
+
+    const atdData = convertTeamToAtd(team);
+    expect(atdData).toEqual(buffer);
   }
 });
 
@@ -69,6 +76,12 @@ Deno.test("Every dofus are mapped", () => {
   const buffer = readAtdFile("correct/equipdofu.atd");
   const teamParsed = parseData(buffer);
   expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+
+  const team = readExtractedData(teamParsed)!;
+  expect(team).not.toBe(undefined);
+
+  const atdData = convertTeamToAtd(team);
+  expect(atdData).toEqual(buffer);
 });
 
 Deno.test("All equipment are mapped", () => {
@@ -76,6 +89,12 @@ Deno.test("All equipment are mapped", () => {
     const buffer = readAtdFile(`correct/STUFF${i}.atd`);
     const teamParsed = parseData(buffer);
     expect(isExtractedTeamCorrect(teamParsed)).toBe(true);
+
+    const team = readExtractedData(teamParsed)!;
+    expect(team).not.toBe(undefined);
+
+    const atdData = convertTeamToAtd(team);
+    expect(atdData).toEqual(buffer);
   }
 });
 
@@ -91,11 +110,11 @@ Deno.test("Exact team composition -> GENERAL1.atd", () => {
     name: "Bouclier",
     sexe: CharacterSexe.Female,
     spells: [FecaSpell.Bulle, FecaSpell.BouclierFeca],
-    equipments: {
-      pet: PetEquipment.Moon,
-      cape: CapeEquipment.CapePlumelaches,
-      head: HeadEquipment.Caracoiffe,
-    },
+    equipments: [
+      { category: EquipmentCategory.Cape, id: CapeEquipment.CapePlumelaches },
+      { category: EquipmentCategory.Pet, id: PetEquipment.Moon },
+      { category: EquipmentCategory.Head, id: HeadEquipment.Caracoiffe },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 67536,
@@ -110,11 +129,11 @@ Deno.test("Exact team composition -> GENERAL1.atd", () => {
       EcaflipSpell.PileOuFace,
       EcaflipSpell.Trefle,
     ],
-    equipments: {
-      pet: PetEquipment.Chienchien,
-      cape: CapeEquipment.Vegacape,
-      dofus: DofusEquipment.Turquoise,
-    },
+    equipments: [
+      { category: EquipmentCategory.Pet, id: PetEquipment.Chienchien },
+      { category: EquipmentCategory.Dofus, id: DofusEquipment.Turquoise },
+      { category: EquipmentCategory.Cape, id: CapeEquipment.Vegacape },
+    ],
     skinGame: CharacterSkinGame.Wakfu,
     skinColor: { hairColor: 7, skinColor: 20, eyesColor: 26 },
     checksum: 67186,
@@ -130,12 +149,12 @@ Deno.test("Exact team composition -> GENERAL1.atd", () => {
       IopSpell.Mutilation,
       IopSpell.Vitalite,
     ],
-    equipments: {
-      pet: PetEquipment.Kwoko,
-      cape: CapeEquipment.CapeDuWaWabbit,
-      head: HeadEquipment.Dragocoiffe,
-      dofus: DofusEquipment.Turquoise,
-    },
+    equipments: [
+      { category: EquipmentCategory.Head, id: HeadEquipment.Dragocoiffe },
+      { category: EquipmentCategory.Cape, id: CapeEquipment.CapeDuWaWabbit },
+      { category: EquipmentCategory.Pet, id: PetEquipment.Kwoko },
+      { category: EquipmentCategory.Dofus, id: DofusEquipment.Turquoise },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 10, eyesColor: 26 },
     checksum: 67886,
@@ -144,6 +163,9 @@ Deno.test("Exact team composition -> GENERAL1.atd", () => {
   expect(team[0]).toEqual(bouclier);
   expect(team[1]).toEqual(lucky);
   expect(team[2]).toEqual(tankeur);
+
+  const atdData = convertTeamToAtd(team);
+  expect(atdData).toEqual(buffer);
 });
 
 Deno.test("Exact team composition -> GENERAL2.atd", () => {
@@ -165,9 +187,7 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
       OsamodasSpell.BenedictionAnimale,
       OsamodasSpell.Corbeau,
     ],
-    equipments: {
-      pet: PetEquipment.Fotome,
-    },
+    equipments: [{ category: EquipmentCategory.Pet, id: PetEquipment.Fotome }],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 66786,
@@ -178,10 +198,10 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
     name: "Redoublante",
     sexe: CharacterSexe.Female,
     spells: [SramSpell.Double, SramSpell.VolDeVie],
-    equipments: {
-      pet: PetEquipment.Chacha,
-      head: HeadEquipment.CouronneDeNidhane,
-    },
+    equipments: [
+      { category: EquipmentCategory.Pet, id: PetEquipment.Chacha },
+      { category: EquipmentCategory.Head, id: HeadEquipment.CouronneDeNidhane },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 66636,
@@ -196,9 +216,9 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
       SacrieurSpell.FolieSanguinaire,
       SacrieurSpell.Attirance,
     ],
-    equipments: {
-      head: HeadEquipment.Dantgoule,
-    },
+    equipments: [
+      { category: EquipmentCategory.Head, id: HeadEquipment.Dantgoule },
+    ],
     skinGame: CharacterSkinGame.Wakfu,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 66886,
@@ -209,9 +229,9 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
     name: "RALALALALA",
     sexe: CharacterSexe.Female,
     spells: [XelorSpell.VolDuTemps, XelorSpell.Ralentissement],
-    equipments: {
-      cape: CapeEquipment.CapeBouffante,
-    },
+    equipments: [
+      { category: EquipmentCategory.Cape, id: CapeEquipment.CapeBouffante },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 66736,
@@ -222,9 +242,9 @@ Deno.test("Exact team composition -> GENERAL2.atd", () => {
     name: "ALLERLENS",
     sexe: CharacterSexe.Male,
     spells: [PandawaSpell.Karcham, PandawaSpell.Chamrak],
-    equipments: {
-      weapon: WeaponEquipment.Rafeuses,
-    },
+    equipments: [
+      { category: EquipmentCategory.Weapon, id: WeaponEquipment.Rafeuses },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 0, skinColor: 8, eyesColor: 24 },
     checksum: 66636,
@@ -262,13 +282,13 @@ Deno.test("Exact team composition -> Les Roberts.atd", () => {
       SramSpell.Invisibilite,
       SramSpell.VolDeVie,
     ],
-    equipments: {
-      weapon: WeaponEquipment.ArcAnge,
-      pet: PetEquipment.BwakDeTerre,
-      cape: CapeEquipment.CapeDuWaWabbit,
-      head: HeadEquipment.Corbacoiffe,
-      dofus: DofusEquipment.Vulbis,
-    },
+    equipments: [
+      { category: EquipmentCategory.Weapon, id: WeaponEquipment.ArcAnge },
+      { category: EquipmentCategory.Cape, id: CapeEquipment.CapeDuWaWabbit },
+      { category: EquipmentCategory.Pet, id: PetEquipment.BwakDeTerre },
+      { category: EquipmentCategory.Dofus, id: DofusEquipment.Vulbis },
+      { category: EquipmentCategory.Head, id: HeadEquipment.Corbacoiffe },
+    ],
     skinGame: CharacterSkinGame.Wakfu,
     skinColor: { hairColor: 4, skinColor: 19, eyesColor: 25 },
     checksum: 68636,
@@ -286,13 +306,13 @@ Deno.test("Exact team composition -> Les Roberts.atd", () => {
       EcaflipSpell.PileOuFace,
       EcaflipSpell.ToutOuRien,
     ],
-    equipments: {
-      weapon: WeaponEquipment.Comete,
-      pet: PetEquipment.Chienchien,
-      cape: CapeEquipment.CapeOrale,
-      head: HeadEquipment.CoiffeDuBouftou,
-      dofus: DofusEquipment.Emeraude,
-    },
+    equipments: [
+      { category: EquipmentCategory.Pet, id: PetEquipment.Chienchien },
+      { category: EquipmentCategory.Head, id: HeadEquipment.CoiffeDuBouftou },
+      { category: EquipmentCategory.Weapon, id: WeaponEquipment.Comete },
+      { category: EquipmentCategory.Cape, id: CapeEquipment.CapeOrale },
+      { category: EquipmentCategory.Dofus, id: DofusEquipment.Emeraude },
+    ],
     skinGame: CharacterSkinGame.Dofus,
     skinColor: { hairColor: 3, skinColor: 19, eyesColor: 24 },
     checksum: 68136,

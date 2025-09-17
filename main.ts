@@ -1,5 +1,5 @@
 import {
-  CharacterEquipment,
+  CharacterEquipments,
   ExtractedCharacter,
   ExtractedEquipment,
   ExtractedTeam,
@@ -9,11 +9,7 @@ import { ParsingError } from "@/enums/error.ts";
 import { readExtractedData } from "@/read.ts";
 import {
   RECORD_CATEGORY_EQUIPMENT_REVERSE,
-  RECORD_WEAPON_EQUIPMENT_REVERSE,
-  RECORD_PET_EQUIPMENT_REVERSE,
-  RECORD_CAPE_EQUIPMENT_REVERSE,
-  RECORD_HEAD_EQUIPMENT_REVERSE,
-  RECORD_DOFUS_EQUIPMENT_REVERSE,
+  getEquipmentReverseRecord,
 } from "@/mapping/equipment.ts";
 import {
   RECORD_IOP_SPELL_REVERSE,
@@ -31,11 +27,10 @@ import {
   RECORD_ENUTROF_SPELL_REVERSE,
 } from "@/mapping/spell.ts";
 import { CharacterClass } from "@/enums/class.ts";
-import { EquipmentCategory } from "./enums/equipment.ts";
 import { Spell } from "./type/spell.ts";
-import { RECORD_CLASS_REVERSE } from "./mapping/class.ts";
-import { RECORD_SKIN_GAME_REVERSE } from "./mapping/skinGame.ts";
-import { SEXE_RECORD_REVERSE } from "./mapping/sexe.ts";
+import { RECORD_CLASS_REVERSE } from "@/mapping/class.ts";
+import { RECORD_SKIN_GAME_REVERSE } from "@/mapping/skinGame.ts";
+import { SEXE_RECORD_REVERSE } from "@/mapping/sexe.ts";
 
 function getInteger(
   buffer: Uint8Array,
@@ -234,7 +229,7 @@ export function convertTeamToAtd(team: Team): Uint8Array {
   function writeString(str: string, arr: number[]) {
     for (let i = 0; i < str.length; i++) {
       arr.push(str.charCodeAt(i));
-    } 
+    }
   }
 
   // Helper pour écrire les sorts
@@ -249,7 +244,7 @@ export function convertTeamToAtd(team: Team): Uint8Array {
     }
   }
 
-  function writeEquipments(equipments: CharacterEquipment, arr: number[]) {
+  function writeEquipments(equipments: CharacterEquipments, arr: number[]) {
     const extractedEquipments =
       characterEquipmentToExtractedEquipments(equipments);
     extractedEquipments.forEach((equipment) => {
@@ -304,38 +299,14 @@ export function convertTeamToAtd(team: Team): Uint8Array {
 }
 
 export function characterEquipmentToExtractedEquipments(
-  equipments: CharacterEquipment
+  equipments: CharacterEquipments
 ): ExtractedEquipment[] {
-  const result: ExtractedEquipment[] = [];
-  if (equipments.weapon !== undefined) {
-    result.push({
-      category: RECORD_CATEGORY_EQUIPMENT_REVERSE[EquipmentCategory.Weapon],
-      id: RECORD_WEAPON_EQUIPMENT_REVERSE[equipments.weapon],
-    });
-  }
-  if (equipments.pet !== undefined) {
-    result.push({
-      category: RECORD_CATEGORY_EQUIPMENT_REVERSE[EquipmentCategory.Pet],
-      id: RECORD_PET_EQUIPMENT_REVERSE[equipments.pet],
-    });
-  }
-  if (equipments.cape !== undefined) {
-    result.push({
-      category: RECORD_CATEGORY_EQUIPMENT_REVERSE[EquipmentCategory.Cape],
-      id: RECORD_CAPE_EQUIPMENT_REVERSE[equipments.cape],
-    });
-  }
-  if (equipments.head !== undefined) {
-    result.push({
-      category: RECORD_CATEGORY_EQUIPMENT_REVERSE[EquipmentCategory.Head],
-      id: RECORD_HEAD_EQUIPMENT_REVERSE[equipments.head],
-    });
-  }
-  if (equipments.dofus !== undefined) {
-    result.push({
-      category: RECORD_CATEGORY_EQUIPMENT_REVERSE[EquipmentCategory.Dofus],
-      id: RECORD_DOFUS_EQUIPMENT_REVERSE[equipments.dofus],
-    });
-  }
-  return result;
+  return equipments.map((equipment) => {
+    const category = RECORD_CATEGORY_EQUIPMENT_REVERSE[equipment.category];
+    const reverseRecord = getEquipmentReverseRecord(category);
+    return {
+      category,
+      id: reverseRecord[equipment.id as keyof typeof reverseRecord],
+    };
+  });
 }

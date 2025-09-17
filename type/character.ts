@@ -1,22 +1,16 @@
 import { CharacterClass } from "@/enums/class.ts";
-import {
-  CapeEquipment,
-  DofusEquipment,
-  HeadEquipment,
-  PetEquipment,
-  WeaponEquipment,
-} from "@/enums/equipment.ts";
+import { EquipmentCategory } from "@/enums/equipment.ts";
 import { CharacterSexe } from "@/enums/sexe.ts";
 import { CharacterSkinGame } from "@/enums/skin.ts";
 import { ClassSpellsMap } from "@/type/mapClassSpell.ts";
+import { Equipment } from "@/type/equipment.ts";
 
-export type CharacterEquipment = {
-  weapon?: WeaponEquipment;
-  pet?: PetEquipment;
-  cape?: CapeEquipment;
-  head?: HeadEquipment;
-  dofus?: DofusEquipment;
+export type CharacterEquipment<T extends EquipmentCategory> = {
+  category: T;
+  id: Equipment[T];
 };
+
+export type CharacterEquipments = Array<CharacterEquipment<EquipmentCategory>>;
 
 export type CharacterSkinColor = {
   hairColor: number;
@@ -24,12 +18,16 @@ export type CharacterSkinColor = {
   eyesColor: number;
 };
 
+export type CharacterSpells<T extends CharacterClass> = Array<
+  ClassSpellsMap[T]
+>;
+
 export type Character<T extends CharacterClass> = {
   name: string;
   sexe: CharacterSexe;
   classe: T;
-  spells: Array<ClassSpellsMap[T]>;
-  equipments: CharacterEquipment;
+  spells: CharacterSpells<T>;
+  equipments: CharacterEquipments;
   skinGame: CharacterSkinGame;
   skinColor: CharacterSkinColor;
   checksum: number;
