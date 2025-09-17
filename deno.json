@@ -15,9 +15,7 @@
     "@std/path": "jsr:@std/path@^1.1.2"
   },
   "exclude": [
-    "investigation",
-    "test",
-    "README.md"
+    "investigation"
   ]
 }
 
