@@ -1,6 +1,6 @@
 {
   "name": "@arenareturns/atdparser",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "license": "MIT",
   "exports": "./main.ts",
   "tasks": {
@@ -17,7 +17,8 @@
   "publish": {
     "exclude": [
       "investigation",
-      "test"
+      "test",
+      "workflows"
     ]
   }
 }
