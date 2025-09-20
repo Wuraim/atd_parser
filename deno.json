@@ -1,6 +1,6 @@
 {
   "name": "@arenareturns/atdparser",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "license": "MIT",
   "exports": "./main.ts",
   "tasks": {
@@ -18,7 +18,8 @@
     "exclude": [
       "investigation",
       "test",
-      "workflows"
+      ".github",
+      "deno.lock"
     ]
   }
 }
