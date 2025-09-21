@@ -1,5 +1,5 @@
-import { CharacterClass } from "@/enums/class.ts";
-import {
+import type { CharacterClass } from "@/enums/class.ts";
+import type {
   CraSpell,
   EcaflipSpell,
   EniripsaSpell,

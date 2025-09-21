@@ -1,9 +1,9 @@
-import { CharacterClass } from "@/enums/class.ts";
-import { EquipmentCategory } from "@/enums/equipment.ts";
-import { CharacterSexe } from "@/enums/sexe.ts";
-import { CharacterSkinGame } from "@/enums/skin.ts";
-import { ClassSpellsMap } from "@/type/mapClassSpell.ts";
-import { Equipment } from "@/type/equipment.ts";
+import type { CharacterClass } from "@/enums/class.ts";
+import type { EquipmentCategory } from "@/enums/equipment.ts";
+import type { CharacterSexe } from "@/enums/sexe.ts";
+import type { CharacterSkinGame } from "@/enums/skin.ts";
+import type { ClassSpellsMap } from "@/type/mapClassSpell.ts";
+import type { Equipment } from "@/type/equipment.ts";
 
 export type CharacterEquipment<T extends EquipmentCategory> = {
   category: T;

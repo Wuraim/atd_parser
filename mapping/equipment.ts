@@ -7,7 +7,6 @@ import {
   EquipmentCategory,
 } from "@/enums/equipment.ts";
 import { invertRecord } from "@/mapping/utils.ts";
-import { Equipment } from "@/type/equipment.ts";
 
 // 23 Weapon equipments
 export const RECORD_WEAPON_EQUIPMENT: Record<number, WeaponEquipment> = {

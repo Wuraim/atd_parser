@@ -4,7 +4,7 @@ import { readAtdFile } from "@/test/utils.ts";
 import { CharacterClass } from "@/enums/class.ts";
 import { RECORD_CLASS } from "@/mapping/class.ts";
 import { isExtractedTeamCorrect } from "@/verification/verification.ts";
-import { Character } from "@/type/character.ts";
+import type { Character } from "@/type/character.ts";
 import { CharacterSexe } from "@/enums/sexe.ts";
 import {
   EcaflipSpell,
